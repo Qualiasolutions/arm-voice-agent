@@ -40,7 +40,7 @@ const CallInterface: React.FC = () => {
       // Initialize Vapi call with the configured assistant
       if (window.vapi) {
         const call = await window.vapi.start({
-          assistantId: 'asst_66fa0e11-0b08-4e35-8bb8-ac34c6dfc22e', // Maria's assistant ID
+          assistantId: '89b5d633-974a-4b58-a6b5-cdbba8c2726a', // Your actual Vapi assistant ID
           // Pass language context to assistant
           metadata: {
             language: language,
