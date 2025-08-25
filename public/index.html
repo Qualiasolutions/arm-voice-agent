@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Armenius Voice Assistant - Production Dashboard</title>
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="description" content="AI-powered voice assistant for Armenius Store Cyprus - Product inquiries, appointments, and customer service in Greek and English" />
+    
+    <!-- Tailwind CSS - CDN (working version) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'armenius-blue': '#0057FF',
+              'armenius-dark': '#1a1a1a',
+              'armenius-gray': '#8F8F8F'
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Vapi Web SDK - Official Loading Script -->
+    <script>
+      // Global Vapi variables
+      var vapiInstance = null;
+      
+      // Load Vapi SDK asynchronously
+      (function (d, t) {
+        var g = document.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+        g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+        g.defer = true;
+        g.async = true;
+        s.parentNode.insertBefore(g, s);
+
+        g.onload = function () {
+          // Vapi SDK loaded - will be initialized later with config
+          console.log('✅ Vapi SDK loaded successfully');
+          window.vapiSDKLoaded = true;
+          if (window.vapiSDK) {
+            console.log('🎯 Vapi SDK available as window.vapiSDK');
+          }
+        };
+        
+        g.onerror = function() {
+          console.error('❌ Failed to load Vapi SDK');
+          window.vapiSDKLoaded = false;
+        };
+      })(document, "script");
+    </script>
+    
+    <!-- Configuration -->
+    <script src="/config.js"></script>
+    
+    <style>
+      .gradient-bg {
+        background: linear-gradient(135deg, #0057FF 0%, #4F46E5 100%);
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .pulse-dot {
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+          <div class="flex items-center space-x-4">
+            <i class="fas fa-microphone-alt text-2xl"></i>
+            <div>
+              <h1 class="text-xl font-bold">Armenius Voice Assistant</h1>
+              <p class="text-sm opacity-90">AI-Powered Customer Service</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-6">
+            <div class="flex items-center space-x-2">
+              <div class="w-3 h-3 bg-green-400 rounded-full pulse-dot"></div>
+              <span class="text-sm">System Online</span>
+            </div>
+            <button onclick="toggleLanguage()" class="px-3 py-1 bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
+              <span id="langToggle">🇬🇧 EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Hero Section -->
+      <div class="text-center mb-12 fade-in">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">
+          24/7 Voice Customer Service for Armenius Store Cyprus
+        </h2>
+        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          Experience our production-ready AI voice assistant handling product inquiries, appointments, and technical support in both Greek and English with €0.32/call efficiency.
+        </p>
+        
+        <!-- Voice Call Section -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4 text-center">
+            <i class="fas fa-phone text-armenius-blue mr-3"></i>
+            Test Voice Assistant
+          </h3>
+          <p class="text-gray-600 mb-6 text-center">
+            Click to start a voice conversation with Maria, your AI assistant
+          </p>
+          
+          <!-- Voice Call Button -->
+          <div class="text-center">
+            <button id="voiceCallBtn" onclick="startVoiceCall()" class="inline-flex items-center px-8 py-4 bg-armenius-blue hover:bg-blue-700 text-white font-bold text-lg rounded-full shadow-lg transform transition-all hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
+              <i id="voiceIcon" class="fas fa-microphone mr-3 text-xl"></i>
+              <span id="voiceText">Start Voice Call</span>
+            </button>
+          </div>
+          
+          <!-- Call Status -->
+          <div id="callStatus" class="mt-6 text-center text-gray-600 hidden">
+            <div class="inline-flex items-center">
+              <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-armenius-blue mr-2"></div>
+              <span>Connecting to Maria...</span>
+            </div>
+          </div>
+          
+          <!-- Voice Instructions -->
+          <div class="mt-6 bg-gray-50 rounded-lg p-4">
+            <h4 class="font-semibold text-gray-900 mb-2">Voice Assistant Capabilities:</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+              <div><i class="fas fa-search mr-2 text-armenius-blue"></i>Product availability & pricing</div>
+              <div><i class="fas fa-calendar mr-2 text-armenius-blue"></i>Service appointments</div>
+              <div><i class="fas fa-tools mr-2 text-armenius-blue"></i>Custom PC building</div>
+              <div><i class="fas fa-truck mr-2 text-armenius-blue"></i>Order tracking</div>
+              <div><i class="fas fa-store mr-2 text-armenius-blue"></i>Store information</div>
+              <div><i class="fas fa-language mr-2 text-armenius-blue"></i>Greek & English support</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="text-3xl font-bold text-green-600">€0.32</div>
+            <div class="text-sm text-gray-600">Cost per Call</div>
+            <div class="text-xs text-green-600">20% under target</div>
+          </div>
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="text-3xl font-bold text-blue-600"><300ms</div>
+            <div class="text-sm text-gray-600">Response Time</div>
+            <div class="text-xs text-blue-600">P95 performance</div>
+          </div>
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="text-3xl font-bold text-purple-600">80%+</div>
+            <div class="text-sm text-gray-600">Automation Rate</div>
+            <div class="text-xs text-purple-600">No escalation needed</div>
+          </div>
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="text-3xl font-bold text-orange-600">2</div>
+            <div class="text-sm text-gray-600">Languages</div>
+            <div class="text-xs text-orange-600">Greek + English</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Tabs -->
+      <div class="bg-white rounded-xl shadow-lg mb-8">
+        <div class="border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8 px-6" aria-label="Tabs">
+            <button onclick="showTab('overview')" class="tab-btn active border-armenius-blue text-armenius-blue whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+              <i class="fas fa-tachometer-alt mr-2"></i>Overview
+            </button>
+            <button onclick="showTab('voice-test')" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+              <i class="fas fa-microphone mr-2"></i>Voice Functions
+            </button>
+            <button onclick="showTab('analytics')" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+              <i class="fas fa-chart-line mr-2"></i>Analytics
+            </button>
+            <button onclick="showTab('products')" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+              <i class="fas fa-boxes mr-2"></i>Product Catalog
+            </button>
+            <button onclick="showTab('appointments')" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+              <i class="fas fa-calendar-alt mr-2"></i>Appointments
+            </button>
+            <button onclick="showTab('system')" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+              <i class="fas fa-cogs mr-2"></i>System Health
+            </button>
+          </nav>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="p-6">
+          <!-- Overview Tab -->
+          <div id="overview-tab" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <!-- Architecture Diagram -->
+              <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">System Architecture</h3>
+                <div class="text-center">
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-center space-x-4">
+                      <div class="bg-blue-100 px-4 py-2 rounded-lg">
+                        <i class="fas fa-phone text-blue-600"></i>
+                        <span class="ml-2 text-sm">Customer Call</span>
+                      </div>
+                      <i class="fas fa-arrow-right text-gray-400"></i>
+                      <div class="bg-green-100 px-4 py-2 rounded-lg">
+                        <i class="fas fa-microphone text-green-600"></i>
+                        <span class="ml-2 text-sm">Vapi.ai</span>
+                      </div>
+                    </div>
+                    <div class="flex items-center justify-center">
+                      <i class="fas fa-arrow-down text-gray-400"></i>
+                    </div>
+                    <div class="bg-purple-100 px-4 py-2 rounded-lg">
+                      <i class="fas fa-server text-purple-600"></i>
+                      <span class="ml-2 text-sm">Vercel Edge Functions</span>
+                    </div>
+                    <div class="flex items-center justify-center">
+                      <i class="fas fa-arrow-down text-gray-400"></i>
+                    </div>
+                    <div class="flex items-center justify-center space-x-4">
+                      <div class="bg-yellow-100 px-3 py-2 rounded-lg text-xs">
+                        <i class="fas fa-database text-yellow-600"></i>
+                        <span class="ml-1">Supabase</span>
+                      </div>
+                      <div class="bg-red-100 px-3 py-2 rounded-lg text-xs">
+                        <i class="fas fa-memory text-red-600"></i>
+                        <span class="ml-1">Cache</span>
+                      </div>
+                      <div class="bg-indigo-100 px-3 py-2 rounded-lg text-xs">
+                        <i class="fas fa-chart-bar text-indigo-600"></i>
+                        <span class="ml-1">Analytics</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live Stats -->
+              <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">Live System Status</h3>
+                <div class="space-y-4">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600">API Health</span>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></div>
+                      <span class="text-sm font-medium text-green-600" id="api-status">Online</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600">Database</span>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></div>
+                      <span class="text-sm font-medium text-green-600" id="db-status">Connected</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600">Cache Hit Rate</span>
+                    <span class="text-sm font-medium text-blue-600" id="cache-rate">87%</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600">Avg Response Time</span>
+                    <span class="text-sm font-medium text-purple-600" id="response-time">245ms</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600">Active Functions</span>
+                    <span class="text-sm font-medium text-gray-900" id="active-functions">5</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="mt-8">
+              <h3 class="text-lg font-semibold mb-4">Recent Voice Interactions</h3>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <div class="space-y-3" id="recent-activity">
+                  <!-- Activity items will be populated by JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Voice Test Tab -->
+          <div id="voice-test-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <!-- Function Tester -->
+              <div>
+                <h3 class="text-lg font-semibold mb-4">Test Voice Functions</h3>
+                <div class="space-y-4">
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-medium mb-2">Function: checkInventory</h4>
+                    <p class="text-sm text-gray-600 mb-3">Check product availability and stock levels</p>
+                    <div class="flex space-x-2">
+                      <input type="text" id="inventory-input" placeholder="e.g., RTX 4090" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-armenius-blue">
+                      <button onclick="testFunction('checkInventory')" class="px-4 py-2 bg-armenius-blue text-white rounded-md hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-search mr-1"></i>Test
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-medium mb-2">Function: getProductPrice</h4>
+                    <p class="text-sm text-gray-600 mb-3">Get current pricing with quantity discounts</p>
+                    <div class="flex space-x-2">
+                      <input type="text" id="price-input" placeholder="e.g., Intel i9-13900K" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-armenius-blue">
+                      <button onclick="testFunction('getProductPrice')" class="px-4 py-2 bg-armenius-blue text-white rounded-md hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-euro-sign mr-1"></i>Test
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-medium mb-2">Function: bookAppointment</h4>
+                    <p class="text-sm text-gray-600 mb-3">Schedule service appointments</p>
+                    <div class="flex space-x-2">
+                      <select id="appointment-type" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-armenius-blue">
+                        <option>repair</option>
+                        <option>consultation</option>
+                        <option>custom_build</option>
+                        <option>warranty_service</option>
+                      </select>
+                      <button onclick="testFunction('bookAppointment')" class="px-4 py-2 bg-armenius-blue text-white rounded-md hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-calendar mr-1"></i>Test
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-medium mb-2">Function: getStoreInfo</h4>
+                    <p class="text-sm text-gray-600 mb-3">Store hours, location, contact details</p>
+                    <div class="flex space-x-2">
+                      <select id="info-type" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-armenius-blue">
+                        <option>hours</option>
+                        <option>location</option>
+                        <option>contact</option>
+                        <option>services</option>
+                      </select>
+                      <button onclick="testFunction('getStoreInfo')" class="px-4 py-2 bg-armenius-blue text-white rounded-md hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-info mr-1"></i>Test
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Test Results -->
+              <div>
+                <h3 class="text-lg font-semibold mb-4">Function Response</h3>
+                <div class="bg-gray-900 text-green-400 rounded-lg p-4 font-mono text-sm h-96 overflow-y-auto" id="function-response">
+                  <div class="text-gray-500">// Function responses will appear here</div>
+                  <div class="text-gray-500">// Click any test button to simulate a voice function call</div>
+                </div>
+                <div class="mt-4 flex items-center space-x-4">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <span class="text-sm text-gray-600">Processing Time: <span id="processing-time">--ms</span></span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                    <span class="text-sm text-gray-600">Cache: <span id="cache-status">--</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Analytics Tab -->
+          <div id="analytics-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <!-- Call Volume Chart -->
+              <div class="bg-white border rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">Daily Call Volume</h3>
+                <canvas id="callVolumeChart" width="400" height="200"></canvas>
+              </div>
+
+              <!-- Cost Analysis Chart -->
+              <div class="bg-white border rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">Cost Analysis</h3>
+                <canvas id="costChart" width="400" height="200"></canvas>
+              </div>
+            </div>
+
+            <!-- Function Usage Stats -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div class="bg-white border rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">Top Functions</h3>
+                <div class="space-y-3" id="top-functions">
+                  <!-- Populated by JavaScript -->
+                </div>
+              </div>
+
+              <div class="bg-white border rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">Language Distribution</h3>
+                <canvas id="languageChart" width="300" height="200"></canvas>
+              </div>
+
+              <div class="bg-white border rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">Performance Metrics</h3>
+                <div class="space-y-4">
+                  <div class="flex justify-between">
+                    <span class="text-sm text-gray-600">Automation Rate</span>
+                    <span class="font-medium text-green-600">82.5%</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-sm text-gray-600">Avg Call Duration</span>
+                    <span class="font-medium text-blue-600">3m 24s</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-sm text-gray-600">Customer Satisfaction</span>
+                    <span class="font-medium text-yellow-600">4.7/5</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-sm text-gray-600">Resolution Rate</span>
+                    <span class="font-medium text-purple-600">89.2%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Products Tab -->
+          <div id="products-tab" class="tab-content hidden">
+            <div class="mb-6">
+              <div class="flex flex-col sm:flex-row gap-4">
+                <div class="flex-1">
+                  <input type="text" id="product-search" placeholder="Search products..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-armenius-blue">
+                </div>
+                <select id="category-filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-armenius-blue">
+                  <option value="">All Categories</option>
+                  <option value="Graphics Cards">Graphics Cards</option>
+                  <option value="Processors">Processors</option>
+                  <option value="Memory">Memory</option>
+                  <option value="Storage">Storage</option>
+                  <option value="Motherboards">Motherboards</option>
+                </select>
+                <button onclick="searchProducts()" class="px-6 py-2 bg-armenius-blue text-white rounded-lg hover:bg-blue-600 transition-colors">
+                  <i class="fas fa-search mr-2"></i>Search
+                </button>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid">
+              <!-- Products will be populated by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Appointments Tab -->
+          <div id="appointments-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <!-- Appointment Booking Demo -->
+              <div>
+                <h3 class="text-lg font-semibold mb-4">Book Appointment Demo</h3>
+                <div class="bg-gray-50 rounded-lg p-6">
+                  <div class="space-y-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
+                      <select id="demo-service-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-armenius-blue">
+                        <option value="repair">Computer Repair</option>
+                        <option value="consultation">Technical Consultation</option>
+                        <option value="custom_build">Custom PC Build</option>
+                        <option value="warranty_service">Warranty Service</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Date</label>
+                      <input type="date" id="demo-date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-armenius-blue">
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                      <input type="tel" id="demo-phone" placeholder="+357 99 123456" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-armenius-blue">
+                    </div>
+                    <button onclick="demoBooking()" class="w-full px-4 py-2 bg-armenius-blue text-white rounded-md hover:bg-blue-600 transition-colors">
+                      <i class="fas fa-calendar-plus mr-2"></i>Demo Booking
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Available Slots -->
+              <div>
+                <h3 class="text-lg font-semibold mb-4">Available Time Slots</h3>
+                <div class="bg-gray-50 rounded-lg p-6">
+                  <div class="grid grid-cols-3 gap-2" id="time-slots">
+                    <!-- Time slots will be populated by JavaScript -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Appointments -->
+            <div class="mt-8">
+              <h3 class="text-lg font-semibold mb-4">Recent Appointments</h3>
+              <div class="bg-white border rounded-lg overflow-hidden">
+                <table class="w-full">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Customer</th>
+                      <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Service</th>
+                      <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Date & Time</th>
+                      <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="appointments-table">
+                    <!-- Appointments will be populated by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Health Tab -->
+          <div id="system-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <!-- API Endpoints Status -->
+              <div>
+                <h3 class="text-lg font-semibold mb-4">API Endpoints</h3>
+                <div class="space-y-3" id="api-endpoints">
+                  <!-- Populated by JavaScript -->
+                </div>
+              </div>
+
+              <!-- System Resources -->
+              <div>
+                <h3 class="text-lg font-semibold mb-4">System Resources</h3>
+                <div class="space-y-4">
+                  <div>
+                    <div class="flex justify-between mb-2">
+                      <span class="text-sm text-gray-600">Memory Cache Usage</span>
+                      <span class="text-sm font-medium">67%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                      <div class="bg-blue-500 h-2 rounded-full" style="width: 67%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between mb-2">
+                      <span class="text-sm text-gray-600">Redis Cache Usage</span>
+                      <span class="text-sm font-medium">43%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                      <div class="bg-green-500 h-2 rounded-full" style="width: 43%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between mb-2">
+                      <span class="text-sm text-gray-600">Database Connections</span>
+                      <span class="text-sm font-medium">12/100</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                      <div class="bg-yellow-500 h-2 rounded-full" style="width: 12%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Environment Variables -->
+            <div class="mt-8">
+              <h3 class="text-lg font-semibold mb-4">Configuration Status</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="env-status">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Armenius Store Cyprus</h3>
+            <p class="text-gray-300 text-sm">
+              Premier computer hardware store in Nicosia, Cyprus. 
+              Specializing in gaming PCs, professional workstations, and technical support.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Contact Information</h3>
+            <div class="text-gray-300 text-sm space-y-2">
+              <div><i class="fas fa-map-marker-alt mr-2"></i>171 Makarios Avenue, Nicosia, Cyprus</div>
+              <div><i class="fas fa-phone mr-2"></i>+357 77-111-104</div>
+              <div><i class="fas fa-clock mr-2"></i>Mon-Fri 9am-7pm, Sat 9am-2pm</div>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Technology Stack</h3>
+            <div class="text-gray-300 text-sm space-y-1">
+              <div>• Vapi.ai Voice Pipeline</div>
+              <div>• Vercel Edge Functions</div>
+              <div>• Supabase PostgreSQL</div>
+              <div>• OpenAI GPT-4o-mini</div>
+              <div>• 11Labs TTS & Deepgram STT</div>
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
+          <p>&copy; 2024 Qualia Solutions. Built for Armenius Store Cyprus. Production-ready AI voice assistant.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/dashboard.js"></script>
+  </body>
+</html>

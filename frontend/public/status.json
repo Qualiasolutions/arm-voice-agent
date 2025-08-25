@@ -1,0 +1,26 @@
+{
+  "status": "online",
+  "application": "Armenius Voice AI Platform",
+  "version": "1.0.0",
+  "description": "Professional enterprise Voice AI management platform",
+  "features": [
+    "Executive Dashboard",
+    "Live Operations Center", 
+    "Voice Assistant Management",
+    "Business Intelligence",
+    "Appointment Management",
+    "Customer Analytics",
+    "Cost & ROI Tracking",
+    "System Configuration"
+  ],
+  "design": {
+    "theme": "Professional teal/dark blue/white",
+    "components": "shadcn/ui v4",
+    "branding": "Powered by Qualia Solutions"
+  },
+  "deployment": {
+    "platform": "Vercel",
+    "build": "production",
+    "timestamp": "2025-08-22T15:10:00Z"
+  }
+}

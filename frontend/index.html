@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Call Maria - Armenius Store Cyprus</title>
+    <meta name="description" content="Call Maria, the AI assistant for Armenius Store Cyprus. Get help with products, orders, and technical support in Greek and English.">
+    <meta name="keywords" content="Armenius Store, Cyprus, computers, electronics, AI assistant, Maria, customer service">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://armenius-store.vercel.app/">
+    <meta property="og:title" content="Call Maria - Armenius Store Cyprus">
+    <meta property="og:description" content="Cyprus' Premier Computer Store - AI-powered customer service">
+    <meta property="og:image" content="/armenius-og.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://armenius-store.vercel.app/">
+    <meta property="twitter:title" content="Call Maria - Armenius Store Cyprus">
+    <meta property="twitter:description" content="Cyprus' Premier Computer Store - AI-powered customer service">
+    <meta property="twitter:image" content="/armenius-og.png">
+
+    <!-- Vapi Web SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/index.js"></script>
+    <script>
+      // Initialize Vapi with public key
+      window.addEventListener('DOMContentLoaded', function() {
+        if (typeof Vapi !== 'undefined') {
+          window.vapi = new Vapi('32b555af-1fbc-4b6c-81c0-c940b07c6da2');
+          console.log('Vapi initialized successfully');
+        } else {
+          console.warn('Vapi SDK not loaded');
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

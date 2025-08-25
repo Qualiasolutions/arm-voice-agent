@@ -1,0 +1,93 @@
+{
+  "version": 2,
+  "regions": ["fra1"],
+  "buildCommand": "echo 'No frontend build needed - using static files'",
+  "outputDirectory": "public",
+  "installCommand": "npm install",
+  "devCommand": "cd frontend && npm run dev",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "functions": {
+    "api/vapi.js": {
+      "maxDuration": 30
+    },
+    "api/vapi/*.js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/vapi",
+      "destination": "/api/vapi.js"
+    },
+    {
+      "source": "/api/vapi/(.*)",
+      "destination": "/api/vapi.js"
+    },
+    {
+      "source": "/api/cron/(.*)",
+      "destination": "/api/cron/$1.js"
+    },
+    {
+      "source": "/((?!api).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization, X-Vapi-Signature"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/warmup-cache",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/daily-report",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/cost-analysis",
+      "schedule": "0 */3 * * *"
+    },
+    {
+      "path": "/api/cron/product-sync",
+      "schedule": "0 6 * * *"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "github": {
+    "autoRedeploy": true,
+    "autoDeployment": true
+  }
+}
