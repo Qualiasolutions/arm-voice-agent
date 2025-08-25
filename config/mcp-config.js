@@ -4,13 +4,13 @@
 export const mcpConfig = {
   // Default MCP server configuration
   defaultServer: {
-    url: process.env.MCP_SERVER_URL || "https://mcp.zapier.com/api/mcp/s/YOUR_ZAPIER_MCP_TOKEN/mcp",
-    protocol: "shttp", // Streamable HTTP for better performance
+    url: process.env.MCP_SERVER_URL || 'https://mcp.zapier.com/api/mcp/s/YOUR_ZAPIER_MCP_TOKEN/mcp',
+    protocol: 'shttp', // Streamable HTTP for better performance
     headers: {
-      "User-Agent": "Armenius-Store-Voice-Assistant/1.0",
-      "X-Client": "vapi",
-      "Accept": "application/json",
-      "Content-Type": "application/json"
+      'User-Agent': 'Armenius-Store-Voice-Assistant/1.0',
+      'X-Client': 'vapi',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
     },
     timeout: 30000, // 30 second timeout
     retryAttempts: 3
@@ -19,48 +19,48 @@ export const mcpConfig = {
   // Available MCP server types and their configurations
   serverTypes: {
     zapier: {
-      name: "Zapier MCP",
-      description: "Access to 7000+ apps and 30000+ actions through Zapier",
-      baseUrl: "https://mcp.zapier.com/api/mcp/s/",
+      name: 'Zapier MCP',
+      description: 'Access to 7000+ apps and 30000+ actions through Zapier',
+      baseUrl: 'https://mcp.zapier.com/api/mcp/s/',
       capabilities: [
-        "email_notifications",
-        "sms_messaging", 
-        "calendar_integration",
-        "crm_integration",
-        "task_automation",
-        "data_sync"
+        'email_notifications',
+        'sms_messaging', 
+        'calendar_integration',
+        'crm_integration',
+        'task_automation',
+        'data_sync'
       ]
     },
     firecrawl: {
-      name: "Firecrawl MCP",
-      description: "Web scraping and content extraction for product data updates",
-      baseUrl: "https://api.firecrawl.dev/",
+      name: 'Firecrawl MCP',
+      description: 'Web scraping and content extraction for product data updates',
+      baseUrl: 'https://api.firecrawl.dev/',
       capabilities: [
-        "web_scraping",
-        "content_extraction",
-        "batch_processing",
-        "structured_data_extraction",
-        "search_capabilities",
-        "deep_research"
+        'web_scraping',
+        'content_extraction',
+        'batch_processing',
+        'structured_data_extraction',
+        'search_capabilities',
+        'deep_research'
       ],
       tools: [
-        "firecrawl_scrape",
-        "firecrawl_batch_scrape",
-        "firecrawl_search",
-        "firecrawl_extract",
-        "firecrawl_crawl",
-        "firecrawl_deep_research"
+        'firecrawl_scrape',
+        'firecrawl_batch_scrape',
+        'firecrawl_search',
+        'firecrawl_extract',
+        'firecrawl_crawl',
+        'firecrawl_deep_research'
       ]
     },
     composio: {
-      name: "Composio MCP",
-      description: "Specific tool integrations (Gmail, GitHub, etc.)",
-      baseUrl: "https://mcp.composio.dev/api/mcp/",
+      name: 'Composio MCP',
+      description: 'Specific tool integrations (Gmail, GitHub, etc.)',
+      baseUrl: 'https://mcp.composio.dev/api/mcp/',
       capabilities: [
-        "gmail_integration",
-        "github_operations",
-        "slack_messaging",
-        "calendar_management"
+        'gmail_integration',
+        'github_operations',
+        'slack_messaging',
+        'calendar_management'
       ]
     }
   },
@@ -68,45 +68,45 @@ export const mcpConfig = {
   // Common MCP tools that might be available for Armenius Store
   expectedTools: {
     // Customer Communication
-    "send_email": {
-      description: "Send confirmation emails to customers",
-      useCases: ["appointment confirmations", "order confirmations", "follow-ups"]
+    'send_email': {
+      description: 'Send confirmation emails to customers',
+      useCases: ['appointment confirmations', 'order confirmations', 'follow-ups']
     },
-    "send_sms": {
-      description: "Send SMS notifications to customers", 
-      useCases: ["appointment reminders", "order updates", "urgent notifications"]
+    'send_sms': {
+      description: 'Send SMS notifications to customers', 
+      useCases: ['appointment reminders', 'order updates', 'urgent notifications']
     },
     
     // Calendar Integration
-    "create_calendar_event": {
-      description: "Create calendar events for appointments",
-      useCases: ["service appointments", "delivery schedules", "staff meetings"]
+    'create_calendar_event': {
+      description: 'Create calendar events for appointments',
+      useCases: ['service appointments', 'delivery schedules', 'staff meetings']
     },
     
     // CRM Integration
-    "update_customer_record": {
-      description: "Update customer information in CRM",
-      useCases: ["contact updates", "purchase history", "service records"]
+    'update_customer_record': {
+      description: 'Update customer information in CRM',
+      useCases: ['contact updates', 'purchase history', 'service records']
     },
     
     // Task Management
-    "create_task": {
-      description: "Create follow-up tasks for staff",
-      useCases: ["order processing", "service follow-ups", "inventory checks"]
+    'create_task': {
+      description: 'Create follow-up tasks for staff',
+      useCases: ['order processing', 'service follow-ups', 'inventory checks']
     },
     
     // Firecrawl Tools for Product Data Management
-    "firecrawl_scrape": {
-      description: "Scrape armenius.com.cy for product updates",
-      useCases: ["product inventory sync", "price updates", "new product discovery"]
+    'firecrawl_scrape': {
+      description: 'Scrape armenius.com.cy for product updates',
+      useCases: ['product inventory sync', 'price updates', 'new product discovery']
     },
-    "firecrawl_extract": {
-      description: "Extract structured product data from web pages",
-      useCases: ["product specifications", "pricing data", "stock information"]
+    'firecrawl_extract': {
+      description: 'Extract structured product data from web pages',
+      useCases: ['product specifications', 'pricing data', 'stock information']
     },
-    "firecrawl_batch_scrape": {
-      description: "Batch scrape multiple product pages",
-      useCases: ["catalog synchronization", "bulk product updates", "competitive analysis"]
+    'firecrawl_batch_scrape': {
+      description: 'Batch scrape multiple product pages',
+      useCases: ['catalog synchronization', 'bulk product updates', 'competitive analysis']
     }
   }
 };
@@ -126,8 +126,8 @@ export async function testMcpConnection(serverUrl) {
       method: 'POST',
       headers: testConfig.headers,
       body: JSON.stringify({
-        jsonrpc: "2.0",
-        method: "tools/list",
+        jsonrpc: '2.0',
+        method: 'tools/list',
         id: 1
       })
     });
@@ -138,7 +138,7 @@ export async function testMcpConnection(serverUrl) {
 
     const data = await response.json();
     
-    console.log("✅ MCP Connection successful");
+    console.log('✅ MCP Connection successful');
     console.log(`Available tools: ${data.result?.tools?.length || 0}`);
     
     return {
@@ -148,7 +148,7 @@ export async function testMcpConnection(serverUrl) {
     };
 
   } catch (error) {
-    console.error("❌ MCP Connection failed:", error.message);
+    console.error('❌ MCP Connection failed:', error.message);
     return {
       success: false,
       error: error.message
@@ -201,9 +201,9 @@ export function validateMcpTool(toolConfig) {
 // Generate MCP tool configuration for Vapi
 export function generateMcpToolConfig(serverUrl, options = {}) {
   const config = {
-    type: "mcp",
-    name: options.name || "mcpTools",
-    description: options.description || "Access to extended capabilities through MCP server integration",
+    type: 'mcp',
+    name: options.name || 'mcpTools',
+    description: options.description || 'Access to extended capabilities through MCP server integration',
     server: {
       url: serverUrl,
       headers: {
@@ -212,7 +212,7 @@ export function generateMcpToolConfig(serverUrl, options = {}) {
       }
     },
     metadata: {
-      protocol: options.protocol || "shttp",
+      protocol: options.protocol || 'shttp',
       ...options.metadata
     }
   };
@@ -255,7 +255,7 @@ export async function validateGlobalMcpConfig() {
   const globalConfig = await loadGlobalMcpConfig();
   
   console.log('🔍 Checking global MCP configuration...');
-  console.log(`📁 Config path: ~/.config/vapi/.env.mcp`);
+  console.log('📁 Config path: ~/.config/vapi/.env.mcp');
   
   if (Object.keys(globalConfig).length === 0) {
     console.log('⚠️  No global MCP configuration found');

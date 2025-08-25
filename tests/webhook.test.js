@@ -1,11 +1,7 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { POST, GET } from '../api/vapi/route.js';
 
-// Mock environment variables
-process.env.VAPI_SERVER_SECRET = 'test-secret';
-process.env.NODE_ENV = 'test';
-
-// Mock Supabase client
+// Mock Supabase client first (hoisted)
 const mockSupabase = {
   from: () => ({
     insert: () => ({ select: () => ({ single: () => ({ data: { id: 'test-id' }, error: null }) }) }),
@@ -14,7 +10,7 @@ const mockSupabase = {
   })
 };
 
-// Mock dependencies
+// Mock dependencies (these get hoisted by vitest)
 vi.mock('../lib/supabase/client.js', () => ({
   db: {
     createConversation: vi.fn().mockResolvedValue({ id: 'test-conv-id' }),
@@ -24,8 +20,20 @@ vi.mock('../lib/supabase/client.js', () => ({
       { id: '1', name: 'RTX 4090', price: 1699.99, stock_quantity: 5, sku: 'RTX4090-MSI' }
     ])
   },
-  supabase: mockSupabase,
-  supabaseAdmin: mockSupabase
+  supabase: {
+    from: () => ({
+      insert: () => ({ select: () => ({ single: () => ({ data: { id: 'test-id' }, error: null }) }) }),
+      update: () => ({ eq: () => ({ select: () => ({ single: () => ({ data: {}, error: null }) }) }) }),
+      select: () => ({ eq: () => ({ data: [], error: null }) })
+    })
+  },
+  supabaseAdmin: {
+    from: () => ({
+      insert: () => ({ select: () => ({ single: () => ({ data: { id: 'test-id' }, error: null }) }) }),
+      update: () => ({ eq: () => ({ select: () => ({ single: () => ({ data: {}, error: null }) }) }) }),
+      select: () => ({ eq: () => ({ data: [], error: null }) })
+    })
+  }
 }));
 
 vi.mock('../lib/functions/index.js', () => ({

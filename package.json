@@ -19,7 +19,14 @@
     "cache:warm": "node scripts/warm-cache.js",
     "logs": "vercel logs --follow",
     "test:mcp": "node scripts/test-mcp-setup.js",
-    "test:voice": "node scripts/test-voice-integration.js"
+    "test:voice": "node scripts/test-voice-integration.js",
+    "prepare": "husky",
+    "validate-env": "node scripts/validate-env.js",
+    "pre-commit": "lint-staged",
+    "deploy:production": "node scripts/deploy.js production",
+    "deploy:preview": "node scripts/deploy.js preview",
+    "health-check": "node scripts/health-check.js",
+    "monitor": "node scripts/health-check.js https://armenius.vercel.app monitor"
   },
   "keywords": [
     "voice-ai",
@@ -45,12 +52,28 @@
     "@types/node": "^20.12.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
+    "audit-ci": "^7.1.0",
     "eslint": "^8.57.0",
+    "eslint-plugin-vitest-globals": "^1.5.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
     "typescript": "^5.5.0",
-    "vitest": "^2.0.0"
+    "vitest": "^2.0.0",
+    "@vitest/coverage-v8": "^2.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",

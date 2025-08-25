@@ -410,15 +410,15 @@ async function handleTransferRequest(call, payload) {
     let destination;
     if (urgency === 'critical' || urgency === 'emergency') {
       destination = {
-        type: "number",
-        number: process.env.EMERGENCY_TRANSFER_NUMBER || "+35777111104",
-        message: "Connecting you to our emergency support team."
+        type: 'number',
+        number: process.env.EMERGENCY_TRANSFER_NUMBER || '+35777111104',
+        message: 'Connecting you to our emergency support team.'
       };
     } else {
       destination = {
-        type: "number", 
-        number: process.env.GENERAL_TRANSFER_NUMBER || "+35777111104",
-        message: "Transferring you to our support team. Please hold."
+        type: 'number', 
+        number: process.env.GENERAL_TRANSFER_NUMBER || '+35777111104',
+        message: 'Transferring you to our support team. Please hold.'
       };
     }
 

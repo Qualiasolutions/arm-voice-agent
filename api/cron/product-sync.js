@@ -50,7 +50,7 @@ export async function GET(request) {
     // Send success response
     return new Response(JSON.stringify({
       success: true,
-      message: `Product sync completed successfully`,
+      message: 'Product sync completed successfully',
       results: {
         productsScraped: scrapeResult.productsScraped,
         productsUpdated: scrapeResult.productsUpdated,

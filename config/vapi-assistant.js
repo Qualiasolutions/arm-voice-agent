@@ -1,11 +1,11 @@
 // Armenius Store Voice Assistant Configuration
 export const assistantConfig = {
-  name: "Armenius Store Assistant",
+  name: 'Armenius Store Assistant',
   
   // Voice configuration
   voice: {
-    provider: "11labs",
-    voiceId: "21m00Tcm4TlvDq8ikWAM", // Rachel (professional female voice)
+    provider: '11labs',
+    voiceId: '21m00Tcm4TlvDq8ikWAM', // Rachel (professional female voice)
     settings: {
       stability: 0.5,
       similarityBoost: 0.75,
@@ -16,8 +16,8 @@ export const assistantConfig = {
 
   // Language Model configuration
   model: {
-    provider: "openai",
-    model: "gpt-4o-mini", // Cost-optimized model
+    provider: 'openai',
+    model: 'gpt-4o-mini', // Cost-optimized model
     systemPrompt: `You are Maria, a helpful assistant at Armenius Store in Cyprus, the premier computer hardware store.
 
 PERSONALITY & APPROACH:
@@ -150,234 +150,234 @@ Remember: You represent Armenius Store's commitment to excellent customer servic
     functions: [
       // Core Armenius Store Functions
       {
-        name: "checkInventory",
-        description: "Check product availability and stock levels",
+        name: 'checkInventory',
+        description: 'Check product availability and stock levels',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             product_name: {
-              type: "string",
-              description: "Name or description of the product to check"
+              type: 'string',
+              description: 'Name or description of the product to check'
             },
             product_sku: {
-              type: "string", 
-              description: "Product SKU code if available"
+              type: 'string', 
+              description: 'Product SKU code if available'
             },
             category: {
-              type: "string",
-              description: "Product category (graphics cards, processors, memory, etc.)"
+              type: 'string',
+              description: 'Product category (graphics cards, processors, memory, etc.)'
             }
           },
-          required: ["product_name"]
+          required: ['product_name']
         }
       },
       {
-        name: "getProductPrice",
-        description: "Get current product pricing with quantity discounts",
+        name: 'getProductPrice',
+        description: 'Get current product pricing with quantity discounts',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             product_identifier: {
-              type: "string",
-              description: "Product name or SKU"
+              type: 'string',
+              description: 'Product name or SKU'
             },
             quantity: {
-              type: "number",
-              description: "Quantity requested for bulk pricing",
+              type: 'number',
+              description: 'Quantity requested for bulk pricing',
               default: 1
             }
           },
-          required: ["product_identifier"]
+          required: ['product_identifier']
         }
       },
       {
-        name: "bookAppointment", 
-        description: "Schedule a service appointment",
+        name: 'bookAppointment', 
+        description: 'Schedule a service appointment',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             service_type: {
-              type: "string",
-              description: "Type of service (repair, consultation, custom_build, warranty_service)",
-              enum: ["repair", "consultation", "custom_build", "warranty_service"]
+              type: 'string',
+              description: 'Type of service (repair, consultation, custom_build, warranty_service)',
+              enum: ['repair', 'consultation', 'custom_build', 'warranty_service']
             },
             preferred_date: {
-              type: "string",
-              description: "Preferred date and time (natural language or ISO format)"
+              type: 'string',
+              description: 'Preferred date and time (natural language or ISO format)'
             },
             customer_phone: {
-              type: "string",
-              description: "Customer phone number for confirmation"
+              type: 'string',
+              description: 'Customer phone number for confirmation'
             },
             customer_name: {
-              type: "string",
-              description: "Customer name"
+              type: 'string',
+              description: 'Customer name'
             }
           },
-          required: ["service_type", "preferred_date", "customer_phone"]
+          required: ['service_type', 'preferred_date', 'customer_phone']
         }
       },
       {
-        name: "checkOrderStatus",
-        description: "Check the status of an existing order",
+        name: 'checkOrderStatus',
+        description: 'Check the status of an existing order',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             order_number: {
-              type: "string",
-              description: "Order number or reference"
+              type: 'string',
+              description: 'Order number or reference'
             },
             customer_phone: {
-              type: "string", 
-              description: "Customer phone number associated with the order"
+              type: 'string', 
+              description: 'Customer phone number associated with the order'
             }
           }
         }
       },
       {
-        name: "getStoreInfo",
-        description: "Get store information (hours, location, contact, services)",
+        name: 'getStoreInfo',
+        description: 'Get store information (hours, location, contact, services)',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             info_type: {
-              type: "string",
-              description: "Type of information requested",
-              enum: ["hours", "location", "contact", "services", "general"]
+              type: 'string',
+              description: 'Type of information requested',
+              enum: ['hours', 'location', 'contact', 'services', 'general']
             },
             language: {
-              type: "string",
-              description: "Preferred language (en/el)",
-              enum: ["en", "el"]
+              type: 'string',
+              description: 'Preferred language (en/el)',
+              enum: ['en', 'el']
             }
           }
         }
       },
       {
-        name: "searchLiveProducts",
-        description: "Search for products using live data from armenius.com.cy website for the most current pricing and availability",
+        name: 'searchLiveProducts',
+        description: 'Search for products using live data from armenius.com.cy website for the most current pricing and availability',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             product_query: {
-              type: "string",
+              type: 'string',
               description: "Product search query (e.g., 'RTX 4090', 'gaming laptop', 'AMD processor')"
             },
             category: {
-              type: "string",
-              description: "Product category to filter by (optional)",
-              enum: ["graphics-cards", "processors", "memory", "storage", "motherboards", "laptops", "desktops", "gaming"]
+              type: 'string',
+              description: 'Product category to filter by (optional)',
+              enum: ['graphics-cards', 'processors', 'memory', 'storage', 'motherboards', 'laptops', 'desktops', 'gaming']
             },
             max_results: {
-              type: "number",
-              description: "Maximum number of results to return",
+              type: 'number',
+              description: 'Maximum number of results to return',
               default: 5,
               minimum: 1,
               maximum: 10
             }
           },
-          required: ["product_query"]
+          required: ['product_query']
         }
       },
       {
-        name: "getLiveProductDetails",
-        description: "Get detailed information about a specific product from the live website",
+        name: 'getLiveProductDetails',
+        description: 'Get detailed information about a specific product from the live website',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             product_url: {
-              type: "string",
-              description: "Direct URL to the product page on armenius.com.cy"
+              type: 'string',
+              description: 'Direct URL to the product page on armenius.com.cy'
             },
             product_sku: {
-              type: "string",
-              description: "Product SKU or identifier"
+              type: 'string',
+              description: 'Product SKU or identifier'
             }
           }
         }
       },
       {
-        name: "buildCustomPC",
-        description: "Interactive custom PC building service - guides customers through component selection and creates custom build orders",
+        name: 'buildCustomPC',
+        description: 'Interactive custom PC building service - guides customers through component selection and creates custom build orders',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             step: {
-              type: "string",
-              description: "Current step in the PC building process",
-              enum: ["start", "select_components", "review_build", "confirm_order"],
-              default: "start"
+              type: 'string',
+              description: 'Current step in the PC building process',
+              enum: ['start', 'select_components', 'review_build', 'confirm_order'],
+              default: 'start'
             },
             components: {
-              type: "object",
-              description: "Currently selected components (CPU, GPU, motherboard, memory, storage, etc.)",
+              type: 'object',
+              description: 'Currently selected components (CPU, GPU, motherboard, memory, storage, etc.)',
               properties: {
-                cpu: { type: "object" },
-                gpu: { type: "object" },
-                motherboard: { type: "object" },
-                memory: { type: "object" },
-                storage: { type: "object" },
-                psu: { type: "object" },
-                case: { type: "object" }
+                cpu: { type: 'object' },
+                gpu: { type: 'object' },
+                motherboard: { type: 'object' },
+                memory: { type: 'object' },
+                storage: { type: 'object' },
+                psu: { type: 'object' },
+                case: { type: 'object' }
               }
             },
             budget_range: {
-              type: "string",
+              type: 'string',
               description: "Customer's budget range",
-              enum: ["800-1200", "1200-2000", "2000-3500", "3500+"]
+              enum: ['800-1200', '1200-2000', '2000-3500', '3500+']
             },
             use_case: {
-              type: "string",
-              description: "Primary use case for the PC",
-              enum: ["gaming", "professional", "office", "programming"]
+              type: 'string',
+              description: 'Primary use case for the PC',
+              enum: ['gaming', 'professional', 'office', 'programming']
             },
             component_selection: {
-              type: "string",
-              description: "Type of component currently being selected",
-              enum: ["cpu", "gpu", "motherboard", "memory", "storage", "psu", "case", "cooling"]
+              type: 'string',
+              description: 'Type of component currently being selected',
+              enum: ['cpu', 'gpu', 'motherboard', 'memory', 'storage', 'psu', 'case', 'cooling']
             },
             confirm_build: {
-              type: "boolean",
-              description: "Whether customer confirms the final build order",
+              type: 'boolean',
+              description: 'Whether customer confirms the final build order',
               default: false
             }
           }
         }
       },
       {
-        name: "trackOrderByNumber",
+        name: 'trackOrderByNumber',
         description: "Track order status and delivery information by tracking number or order ID - say 'Yes, I can track that for you!'",
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             tracking_number: {
-              type: "string",
+              type: 'string',
               description: "Tracking number or order ID to look up (e.g., '1005', 'ARM-1008')"
             },
             order_id: {
-              type: "string",
-              description: "Alternative order ID if tracking number not provided"
+              type: 'string',
+              description: 'Alternative order ID if tracking number not provided'
             },
             customer_phone: {
-              type: "string",
-              description: "Customer phone number to verify order ownership"
+              type: 'string',
+              description: 'Customer phone number to verify order ownership'
             }
           },
-          required: ["tracking_number"]
+          required: ['tracking_number']
         }
       },
       {
-        name: "checkOrderArrivals",
-        description: "Check if customer has any recent order arrivals ready for pickup",
+        name: 'checkOrderArrivals',
+        description: 'Check if customer has any recent order arrivals ready for pickup',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             customer_phone: {
-              type: "string",
+              type: 'string',
               description: "Customer's phone number"
             },
             customer_email: {
-              type: "string",
+              type: 'string',
               description: "Customer's email address"
             }
           }
@@ -386,34 +386,34 @@ Remember: You represent Armenius Store's commitment to excellent customer servic
       
       // MCP Integration Tools
       {
-        type: "mcp",
-        name: "zapierTools",
-        description: "Access to external services and workflow automation through Zapier (7000+ apps)",
+        type: 'mcp',
+        name: 'zapierTools',
+        description: 'Access to external services and workflow automation through Zapier (7000+ apps)',
         server: {
-          url: process.env.MCP_SERVER_URL || "https://mcp.zapier.com/api/mcp/s/YOUR_ZAPIER_MCP_TOKEN/mcp",
+          url: process.env.MCP_SERVER_URL || 'https://mcp.zapier.com/api/mcp/s/YOUR_ZAPIER_MCP_TOKEN/mcp',
           headers: {
-            "User-Agent": "Armenius-Store-Voice-Assistant/1.0",
-            "X-Client": "vapi"
+            'User-Agent': 'Armenius-Store-Voice-Assistant/1.0',
+            'X-Client': 'vapi'
           }
         },
         metadata: {
-          protocol: "shttp"
+          protocol: 'shttp'
         }
       },
       {
-        type: "mcp",
-        name: "firecrawlTools",
-        description: "Access to live product data and web scraping capabilities for real-time armenius.com.cy information",
+        type: 'mcp',
+        name: 'firecrawlTools',
+        description: 'Access to live product data and web scraping capabilities for real-time armenius.com.cy information',
         server: {
-          command: "npx",
-          args: ["-y", "firecrawl-mcp"],
+          command: 'npx',
+          args: ['-y', 'firecrawl-mcp'],
           env: {
-            FIRECRAWL_API_KEY: process.env.FIRECRAWL_API_KEY || "fc-898a23053eb94662911fb9fc883d22f9"
+            FIRECRAWL_API_KEY: process.env.FIRECRAWL_API_KEY || 'fc-898a23053eb94662911fb9fc883d22f9'
           }
         },
         metadata: {
-          protocol: "stdio",
-          description: "Provides real-time access to armenius.com.cy product catalog including pricing, availability, and specifications"
+          protocol: 'stdio',
+          description: 'Provides real-time access to armenius.com.cy product catalog including pricing, availability, and specifications'
         }
       }
     ]
@@ -421,26 +421,26 @@ Remember: You represent Armenius Store's commitment to excellent customer servic
 
   // Speech-to-Text configuration
   transcriber: {
-    provider: "deepgram",
-    model: "nova-2",
-    language: "multi", // Support multiple languages
+    provider: 'deepgram',
+    model: 'nova-2',
+    language: 'multi', // Support multiple languages
     smartFormat: true,
     keywords: [
       // English tech terms
-      "RTX", "GeForce", "AMD", "Ryzen", "Intel", "Core", "NVIDIA",
-      "graphics", "processor", "motherboard", "memory", "RAM", "SSD",
-      "gaming", "workstation", "laptop", "desktop", "custom",
+      'RTX', 'GeForce', 'AMD', 'Ryzen', 'Intel', 'Core', 'NVIDIA',
+      'graphics', 'processor', 'motherboard', 'memory', 'RAM', 'SSD',
+      'gaming', 'workstation', 'laptop', 'desktop', 'custom',
       
       // Greek tech terms  
-      "κάρτα", "επεξεργαστής", "μνήμη", "δίσκος", "υπολογιστής",
-      "γκέιμινγκ", "λάπτοπ", "επισκευή", "εγγύηση"
+      'κάρτα', 'επεξεργαστής', 'μνήμη', 'δίσκος', 'υπολογιστής',
+      'γκέιμινγκ', 'λάπτοπ', 'επισκευή', 'εγγύηση'
     ]
   },
 
   // Server configuration for webhooks
   serverUrl: process.env.NODE_ENV === 'production' 
     ? `https://${process.env.VERCEL_URL}/api/vapi`
-    : "http://localhost:3000/api/vapi",
+    : 'http://localhost:3000/api/vapi',
   
   serverUrlSecret: process.env.VAPI_SERVER_SECRET,
 
@@ -448,7 +448,7 @@ Remember: You represent Armenius Store's commitment to excellent customer servic
   firstMessage: "Welcome to Armenius Store! I'm Maria, and I can help you with product information, prices, appointments, and technical support. How can I assist you today?",
   
   // Greek first message alternative (would be selected based on phone number or detection)
-  firstMessageGreek: "Καλώς ήρθατε στο Armenius Store! Είμαι η Μαρία και μπορώ να σας βοηθήσω με πληροφορίες προϊόντων, τιμές, ραντεβού και τεχνική υποστήριξη. Πώς μπορώ να σας βοηθήσω σήμερα;",
+  firstMessageGreek: 'Καλώς ήρθατε στο Armenius Store! Είμαι η Μαρία και μπορώ να σας βοηθήσω με πληροφορίες προϊόντων, τιμές, ραντεβού και τεχνική υποστήριξη. Πώς μπορώ να σας βοηθήσω σήμερα;',
 
   // Response timing
   responseDelaySeconds: 0.4,
@@ -456,8 +456,8 @@ Remember: You represent Armenius Store's commitment to excellent customer servic
   numFastTurns: 3,
 
   // End call conditions
-  endCallMessage: "Thank you for calling Armenius Store! Have a great day!",
-  endCallMessageGreek: "Ευχαριστούμε που καλέσατε το Armenius Store! Να έχετε μια υπέροχη μέρα!",
+  endCallMessage: 'Thank you for calling Armenius Store! Have a great day!',
+  endCallMessageGreek: 'Ευχαριστούμε που καλέσατε το Armenius Store! Να έχετε μια υπέροχη μέρα!',
   
   // Silence detection
   silenceTimeoutSeconds: 30,
@@ -504,7 +504,7 @@ export function createAssistantConfig(options = {}) {
 - Preferred Language: ${language}
 - Last Order: ${customerProfile.lastOrderDate}
 ${customerProfile.recentOrders?.length > 0 ? 
-`- Recent Orders: ${customerProfile.recentOrders.map(order => order.reference_number).join(', ')}` : ''}
+    `- Recent Orders: ${customerProfile.recentOrders.map(order => order.reference_number).join(', ')}` : ''}
 - Can Skip Verification: ${customerProfile.canSkipVerification ? 'Yes' : 'No'}`;
 
     config.model.systemPrompt += customerContext;

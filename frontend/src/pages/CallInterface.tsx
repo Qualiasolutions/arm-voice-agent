@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import Vapi from '@vapi-ai/web'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -31,63 +32,131 @@ const CallInterface: React.FC = () => {
   const [callStartTime, setCallStartTime] = useState<Date | null>(null)
   const [isMuted, setIsMuted] = useState(false)
   const [isVolumeMuted, setIsVolumeMuted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [permissionGranted, setPermissionGranted] = useState<boolean | null>(null)
+  
+  const vapiRef = useRef<Vapi | null>(null)
+
+  // Initialize Vapi instance on component mount
+  useEffect(() => {
+    try {
+      const vapiInstance = new Vapi('32b555af-1fbc-4b6c-81c0-c940b07c6da2')
+      vapiRef.current = vapiInstance
+
+      // Set up event listeners
+      vapiInstance.on('call-start', () => {
+        console.log('Call started')
+        setCallState('connected')
+        setCallStartTime(new Date())
+        setError(null)
+      })
+
+      vapiInstance.on('call-end', () => {
+        console.log('Call ended')
+        setCallState('ended')
+        setCallStartTime(null)
+        setTimeout(() => setCallState('idle'), 3000)
+      })
+
+      vapiInstance.on('error', (error) => {
+        console.error('Vapi error:', error)
+        setCallState('error')
+        setError(error.message || 'Voice call failed')
+        setTimeout(() => setCallState('idle'), 5000)
+      })
+
+      vapiInstance.on('speech-start', () => {
+        console.log('Assistant speaking')
+      })
+
+      vapiInstance.on('speech-end', () => {
+        console.log('Assistant stopped speaking')
+      })
+
+      vapiInstance.on('volume-level', (volume) => {
+        console.log('Volume level:', volume)
+      })
+
+      vapiInstance.on('message', (message) => {
+        console.log('Message:', message)
+      })
+
+      console.log('Vapi initialized successfully')
+      
+    } catch (error) {
+      console.error('Failed to initialize Vapi:', error)
+      setError('Failed to initialize voice system')
+    }
+
+    // Cleanup on unmount
+    return () => {
+      if (vapiRef.current) {
+        vapiRef.current.stop()
+      }
+    }
+  }, [])
+
+  // Check microphone permission
+  const checkMicrophonePermission = async (): Promise<boolean> => {
+    try {
+      const result = await navigator.permissions.query({ name: 'microphone' as PermissionName })
+      if (result.state === 'granted') {
+        setPermissionGranted(true)
+        return true
+      } else if (result.state === 'prompt') {
+        // Will be prompted when starting call
+        return true
+      } else {
+        setPermissionGranted(false)
+        setError('Microphone access denied. Please allow microphone access to use voice calling.')
+        return false
+      }
+    } catch (error) {
+      console.warn('Permission API not supported, will request permission on call start')
+      return true
+    }
+  }
 
   // Real Vapi integration
   const handleStartCall = async () => {
     try {
+      setError(null)
       setCallState('connecting')
       
-      // Initialize Vapi call with the configured assistant
-      if (window.vapi) {
-        const call = await window.vapi.start({
-          assistantId: '89b5d633-974a-4b58-a6b5-cdbba8c2726a', // Your actual Vapi assistant ID
-          // Pass language context to assistant
-          metadata: {
-            language: language,
-            source: 'armenius_store_website'
-          }
-        })
-        
-        setCallState('ringing')
-        
-        // Listen for call events
-        call.on('call-started', () => {
-          setCallState('connected')
-          setCallStartTime(new Date())
-        })
-        
-        call.on('call-ended', () => {
-          setCallState('ended')
-          setCallStartTime(null)
-          setTimeout(() => setCallState('idle'), 3000)
-        })
-        
-        call.on('error', (error) => {
-          console.error('Vapi call error:', error)
-          setCallState('error')
-        })
-        
-      } else {
-        // Fallback simulation for development
-        setTimeout(() => {
-          setCallState('ringing')
-          setTimeout(() => {
-            setCallState('connected')
-            setCallStartTime(new Date())
-          }, 2000)
-        }, 1000)
+      // Check microphone permission first
+      const hasPermission = await checkMicrophonePermission()
+      if (!hasPermission) {
+        setCallState('error')
+        return
+      }
+
+      if (!vapiRef.current) {
+        throw new Error('Vapi not initialized')
       }
       
-    } catch (error) {
+      // Start the call with assistant ID and metadata
+      await vapiRef.current.start('89b5d633-974a-4b58-a6b5-cdbba8c2726a', {
+        variableValues: {
+          language: language,
+          source: 'armenius_store_website',
+          store_name: 'Armenius Store Cyprus'
+        }
+      })
+      
+      setCallState('ringing')
+      
+    } catch (error: any) {
       console.error('Call failed:', error)
       setCallState('error')
+      setError(error.message || 'Failed to start voice call')
+      setTimeout(() => setCallState('idle'), 5000)
     }
   }
 
   const handleEndCall = () => {
     // End Vapi call if active
-    if (window.vapi && callState === 'connected') {
-      window.vapi.stop()
+    if (vapiRef.current && callState === 'connected') {
+      vapiRef.current.stop()
     }
     
     setCallState('ended')
@@ -101,8 +170,8 @@ const CallInterface: React.FC = () => {
     setIsMuted(newMutedState)
     
     // Integrate with Vapi mute functionality
-    if (window.vapi && callState === 'connected') {
-      window.vapi.setMuted(newMutedState)
+    if (vapiRef.current && callState === 'connected') {
+      vapiRef.current.setMuted(newMutedState)
     }
   }
 
@@ -110,10 +179,8 @@ const CallInterface: React.FC = () => {
     const newVolumeState = !isVolumeMuted
     setIsVolumeMuted(newVolumeState)
     
-    // Integrate with Vapi volume control
-    if (window.vapi && callState === 'connected') {
-      window.vapi.setVolume(newVolumeState ? 0 : 1)
-    }
+    // Note: Vapi doesn't have setVolume method, this is for UI state only
+    // Volume control would be handled by browser/system
   }
 
   const services = {

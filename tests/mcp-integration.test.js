@@ -8,10 +8,10 @@ describe('MCP Integration Tests', () => {
   describe('MCP Configuration Validation', () => {
     test('should validate MCP tool configuration correctly', () => {
       const validConfig = {
-        type: "mcp",
-        name: "mcpTools",
+        type: 'mcp',
+        name: 'mcpTools',
         server: {
-          url: "https://mcp.zapier.com/api/mcp/s/test/mcp"
+          url: 'https://mcp.zapier.com/api/mcp/s/test/mcp'
         }
       };
 
@@ -22,8 +22,8 @@ describe('MCP Integration Tests', () => {
 
     test('should reject invalid MCP tool configuration', () => {
       const invalidConfig = {
-        type: "invalid",
-        name: "mcpTools"
+        type: 'invalid',
+        name: 'mcpTools'
         // missing server
       };
 
@@ -34,10 +34,10 @@ describe('MCP Integration Tests', () => {
 
     test('should reject invalid URL format', () => {
       const invalidUrlConfig = {
-        type: "mcp",
-        name: "mcpTools",
+        type: 'mcp',
+        name: 'mcpTools',
         server: {
-          url: "not-a-valid-url"
+          url: 'not-a-valid-url'
         }
       };
 
@@ -72,7 +72,7 @@ describe('MCP Integration Tests', () => {
 
   describe('MCP Tool Generation', () => {
     test('should generate valid MCP tool configuration', () => {
-      const serverUrl = "https://mcp.zapier.com/api/mcp/s/test/mcp";
+      const serverUrl = 'https://mcp.zapier.com/api/mcp/s/test/mcp';
       const config = generateMcpToolConfig(serverUrl);
       
       const validation = validateMcpTool(config);
@@ -80,11 +80,11 @@ describe('MCP Integration Tests', () => {
     });
 
     test('should include custom options in generated config', () => {
-      const serverUrl = "https://mcp.zapier.com/api/mcp/s/test/mcp";
+      const serverUrl = 'https://mcp.zapier.com/api/mcp/s/test/mcp';
       const options = {
-        name: "customMcp",
-        description: "Custom MCP tool",
-        protocol: "sse"
+        name: 'customMcp',
+        description: 'Custom MCP tool',
+        protocol: 'sse'
       };
       
       const config = generateMcpToolConfig(serverUrl, options);
@@ -128,7 +128,7 @@ describe('MCP Functionality Tests', () => {
     });
 
     test.skip('should handle connection failures gracefully', async () => {
-      const invalidUrl = "https://invalid-mcp-server.com/mcp";
+      const invalidUrl = 'https://invalid-mcp-server.com/mcp';
       
       const result = await testMcpConnection(invalidUrl);
       expect(result.success).toBe(false);
@@ -161,20 +161,20 @@ describe('MCP Functionality Tests', () => {
 
 // Mock webhook payload for MCP testing
 export const mockMcpWebhookPayload = {
-  type: "function-call",
+  type: 'function-call',
   call: {
-    id: "test-call-123",
+    id: 'test-call-123',
     customer: {
-      number: "+35799123456"
+      number: '+35799123456'
     }
   },
   functionCall: {
-    name: "mcpTools",
+    name: 'mcpTools',
     parameters: {
-      tool: "send_email",
-      recipient: "customer@example.com",
-      subject: "Appointment Confirmation - Armenius Store",
-      body: "Your appointment has been confirmed for tomorrow at 2 PM."
+      tool: 'send_email',
+      recipient: 'customer@example.com',
+      subject: 'Appointment Confirmation - Armenius Store',
+      body: 'Your appointment has been confirmed for tomorrow at 2 PM.'
     }
   }
 };
@@ -182,13 +182,13 @@ export const mockMcpWebhookPayload = {
 // Integration test helper
 export function createMcpTestScenario(toolName, parameters) {
   return {
-    type: "function-call",
+    type: 'function-call',
     call: {
       id: `test-call-${Date.now()}`,
-      customer: { number: "+35799123456" }
+      customer: { number: '+35799123456' }
     },
     functionCall: {
-      name: "mcpTools",
+      name: 'mcpTools',
       parameters: {
         tool: toolName,
         ...parameters

@@ -43,8 +43,8 @@ export default async function handler(req, res) {
 
     // Cache business hours in both languages
     const businessHours = {
-      en: "We are open Monday to Friday 9am-7pm, Saturday 9am-2pm, closed Sunday",
-      el: "Είμαστε ανοιχτά Δευτέρα έως Παρασκευή 9π.μ.-7μ.μ., Σάββατο 9π.μ.-2μ.μ., Κυριακή κλειστά"
+      en: 'We are open Monday to Friday 9am-7pm, Saturday 9am-2pm, closed Sunday',
+      el: 'Είμαστε ανοιχτά Δευτέρα έως Παρασκευή 9π.μ.-7μ.μ., Σάββατο 9π.μ.-2μ.μ., Κυριακή κλειστά'
     };
 
     for (const [lang, hours] of Object.entries(businessHours)) {

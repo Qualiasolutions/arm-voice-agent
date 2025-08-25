@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+# Run lint-staged to check and fix code quality
+npm run pre-commit
+
+# Run environment validation for development
+npm run validate-env development
+
+# Run basic tests to ensure nothing is broken
+npm run test tests/simple.test.js
