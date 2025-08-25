@@ -22,18 +22,65 @@
     <meta property="twitter:description" content="Cyprus' Premier Computer Store - AI-powered customer service">
     <meta property="twitter:image" content="/armenius-og.png">
 
-    <!-- Vapi Web SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/index.js"></script>
+    <!-- Vapi Web SDK - Multiple CDN fallbacks -->
     <script>
-      // Initialize Vapi with public key
-      window.addEventListener('DOMContentLoaded', function() {
-        if (typeof Vapi !== 'undefined') {
-          window.vapi = new Vapi('32b555af-1fbc-4b6c-81c0-c940b07c6da2');
-          console.log('Vapi initialized successfully');
-        } else {
-          console.warn('Vapi SDK not loaded');
+      // Load Vapi SDK with fallback
+      (function() {
+        function loadVapi() {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/index.js';
+          script.onload = function() {
+            console.log('Vapi SDK loaded successfully');
+            initVapi();
+          };
+          script.onerror = function() {
+            console.warn('Primary CDN failed, trying fallback...');
+            // Fallback CDN
+            const fallbackScript = document.createElement('script');
+            fallbackScript.src = 'https://unpkg.com/@vapi-ai/web@latest/dist/index.js';
+            fallbackScript.onload = function() {
+              console.log('Vapi SDK loaded via fallback CDN');
+              initVapi();
+            };
+            fallbackScript.onerror = function() {
+              console.error('Failed to load Vapi SDK from all CDNs');
+              showVapiError();
+            };
+            document.head.appendChild(fallbackScript);
+          };
+          document.head.appendChild(script);
         }
-      });
+
+        function initVapi() {
+          try {
+            if (typeof Vapi !== 'undefined') {
+              window.vapi = new Vapi('32b555af-1fbc-4b6c-81c0-c940b07c6da2');
+              console.log('Vapi initialized with assistant ID: 89b5d633-974a-4b58-a6b5-cdbba8c2726a');
+            } else {
+              throw new Error('Vapi constructor not available');
+            }
+          } catch (error) {
+            console.error('Failed to initialize Vapi:', error);
+            showVapiError();
+          }
+        }
+
+        function showVapiError() {
+          // Show user-friendly error message
+          setTimeout(function() {
+            const errorDiv = document.createElement('div');
+            errorDiv.innerHTML = '<div style="position:fixed;top:20px;right:20px;background:#f44336;color:white;padding:15px;border-radius:5px;z-index:9999;">Voice calling temporarily unavailable. Please refresh the page.</div>';
+            document.body.appendChild(errorDiv);
+          }, 1000);
+        }
+
+        // Load when DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', loadVapi);
+        } else {
+          loadVapi();
+        }
+      })();
     </script>
   </head>
   <body>
