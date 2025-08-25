@@ -1,8 +1,8 @@
 {
   "version": 2,
   "regions": ["fra1"],
-  "buildCommand": "echo 'No frontend build needed - using static files'",
-  "outputDirectory": "public",
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
   "installCommand": "npm install",
   "devCommand": "cd frontend && npm run dev",
   "cleanUrls": true,
