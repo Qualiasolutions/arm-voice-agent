@@ -13,16 +13,11 @@ import {
   MapPin, 
   Clock, 
   Phone, 
-  Monitor,
-  Cpu,
-  HardDrive,
-  Gamepad2,
   Wrench,
   ShoppingCart,
   Calendar,
   User
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 type CallState = 'idle' | 'connecting' | 'ringing' | 'connected' | 'ended' | 'error'
 type Language = 'el' | 'en'
@@ -289,12 +284,6 @@ const CallInterface: React.FC = () => {
     ]
   }
 
-  const categories = [
-    { icon: Monitor, name: 'Gaming PCs', color: 'from-blue-500 to-purple-600' },
-    { icon: Cpu, name: 'Components', color: 'from-green-500 to-teal-600' },
-    { icon: HardDrive, name: 'Storage', color: 'from-orange-500 to-red-600' },
-    { icon: Gamepad2, name: 'Peripherals', color: 'from-purple-500 to-pink-600' }
-  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
@@ -304,8 +293,12 @@ const CallInterface: React.FC = () => {
           <div className="flex items-center justify-between">
             {/* Store Logo & Info */}
             <div className="flex items-center space-x-4">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl shadow-lg">
-                <Building2 className="size-8 text-white" />
+              <div className="bg-white p-2 rounded-xl shadow-lg">
+                <img 
+                  src="https://armenius.com.cy/themes/technostore/assets/img/share_logo.png" 
+                  alt="Armenius Store Logo" 
+                  className="h-12 w-auto"
+                />
               </div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -382,30 +375,6 @@ const CallInterface: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Product Categories */}
-            <Card className="overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">
-                  {language === 'el' ? 'Κατηγορίες Προϊόντων' : 'Product Categories'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-3">
-                  {categories.map((category, index) => (
-                    <div
-                      key={index}
-                      className={cn(
-                        "p-4 rounded-lg text-center text-white font-medium transition-transform duration-200 hover:scale-105 cursor-pointer",
-                        `bg-gradient-to-r ${category.color}`
-                      )}
-                    >
-                      <category.icon className="size-6 mx-auto mb-2" />
-                      <span className="text-sm">{category.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
           {/* Center - Main Call Interface */}
@@ -531,24 +500,6 @@ const CallInterface: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Emergency Support */}
-            <Card className="overflow-hidden border-0 shadow-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white">
-              <CardContent className="p-6 text-center">
-                <h3 className="font-bold text-lg mb-2">
-                  {language === 'el' ? 'Επείγουσα Υποστήριξη' : 'Emergency Support'}
-                </h3>
-                <p className="text-sm opacity-90 mb-4">
-                  {language === 'el' 
-                    ? 'Για επείγοντα τεχνικά προβλήματα εκτός ωραρίου'
-                    : 'For urgent technical issues outside business hours'
-                  }
-                </p>
-                <Button variant="outline" className="bg-white text-orange-600 hover:bg-orange-50 border-white">
-                  <Phone className="size-4 mr-2" />
-                  +357 99-888-777
-                </Button>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
@@ -573,7 +524,7 @@ const CallInterface: React.FC = () => {
                 <span className="font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                   Qualia Solutions
                 </span>
-                {' '}• AI Voice Technology by Vapi.ai • v1.0.0
+                {' '}• v1.0.0
               </p>
             </div>
           </div>
