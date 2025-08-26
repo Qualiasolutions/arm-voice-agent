@@ -20,7 +20,7 @@
     "logs": "vercel logs --follow",
     "test:mcp": "node scripts/test-mcp-setup.js",
     "test:voice": "node scripts/test-voice-integration.js",
-    "prepare": "husky",
+    "prepare": "husky || exit 0",
     "validate-env": "node scripts/validate-env.js",
     "validate-env:development": "NODE_ENV=development node scripts/validate-env.js",
     "build-check": "node scripts/build-check.js",
