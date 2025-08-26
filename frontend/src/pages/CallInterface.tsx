@@ -40,25 +40,14 @@ const CallInterface: React.FC = () => {
 
   // Initialize Vapi instance on component mount
   useEffect(() => {
-    // Check if Vapi SDK is loaded
-    if (typeof window !== 'undefined' && !window.Vapi) {
-      logger.error('Vapi SDK not loaded on window object', null, {
-        component: 'CallInterface',
-        windowVapi: typeof window.Vapi,
-        availableGlobals: Object.keys(window).filter(k => k.toLowerCase().includes('vapi'))
-      });
-      setError('Voice system not available. Please refresh the page.');
-      return;
-    }
-
     logger.info('Initializing Vapi voice system', {
       apiKey: '32b555af-1fbc-4b6c-81c0-c940b07c6da2'.substring(0, 8) + '***',
       component: 'CallInterface',
-      vapiAvailable: !!window.Vapi
+      vapiImported: !!Vapi
     });
     
     try {
-      const vapiInstance = new window.Vapi('32b555af-1fbc-4b6c-81c0-c940b07c6da2')
+      const vapiInstance = new Vapi('32b555af-1fbc-4b6c-81c0-c940b07c6da2')
       vapiRef.current = vapiInstance
 
       // Set up event listeners with comprehensive logging
