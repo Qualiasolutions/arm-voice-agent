@@ -51,12 +51,24 @@ export default async function handler(req, res) {
         .select('id')
         .limit(1);
             
-      healthStatus.services.database = error ? 'error' : 'online';
+      if (error) {
+        console.error('Database health check failed:', error);
+        healthStatus.services.database = 'error';
+        healthStatus.database_error = error.message;
+      } else {
+        healthStatus.services.database = 'online';
+        healthStatus.database_records = data?.length || 0;
+      }
     } else {
       healthStatus.services.database = 'not configured';
+      healthStatus.database_error = 'Missing environment variables: ' + 
+        (!process.env.SUPABASE_URL ? 'SUPABASE_URL ' : '') +
+        (!process.env.SUPABASE_ANON_KEY ? 'SUPABASE_ANON_KEY' : '');
     }
   } catch (error) {
+    console.error('Database connection error:', error);
     healthStatus.services.database = 'error';
+    healthStatus.database_error = error.message;
   }
     
   // Check Vapi configuration

@@ -1,159 +1,130 @@
 #!/usr/bin/env node
 
 /**
- * Environment Variable Validation Script
- * Validates that all required environment variables are present
+ * Environment validation script for Armenius Voice Assistant
+ * This script validates that all required environment variables are properly set
  */
 
+import { createClient } from '@supabase/supabase-js';
+
 const requiredEnvVars = {
-  // Vapi.ai Voice Service
-  VAPI_API_KEY: 'Vapi.ai API key for voice processing',
-  VAPI_SERVER_SECRET: 'Secret for webhook validation',
+  // Core Vapi.ai Configuration
+  VAPI_API_KEY: 'Vapi.ai API key for voice services',
+  VAPI_SERVER_SECRET: 'Webhook secret for Vapi.ai security',
   
   // Supabase Database
   SUPABASE_URL: 'Supabase project URL',
   SUPABASE_ANON_KEY: 'Supabase anonymous key',
-  SUPABASE_SERVICE_ROLE_KEY: 'Supabase service role key',
+  SUPABASE_SERVICE_ROLE_KEY: 'Supabase service role key (for admin operations)',
   
   // AI Services
-  OPENAI_API_KEY: 'OpenAI API key for language models',
+  OPENAI_API_KEY: 'OpenAI API key for GPT models',
   DEEPGRAM_API_KEY: 'Deepgram API key for speech-to-text',
   
-  // Caching & Storage
-  UPSTASH_REDIS_REST_URL: 'Upstash Redis REST URL for caching',
-  UPSTASH_REDIS_REST_TOKEN: 'Upstash Redis REST token'
+  // Caching & Performance
+  UPSTASH_REDIS_REST_URL: 'Upstash Redis URL for caching',
+  UPSTASH_REDIS_REST_TOKEN: 'Upstash Redis authentication token',
+  
+  // Optional: Phone Services
+  TWILIO_ACCOUNT_SID: 'Twilio account SID (optional)',
+  TWILIO_AUTH_TOKEN: 'Twilio auth token (optional)'
 };
 
 const optionalEnvVars = {
-  // Phone Service (optional for some deployments)
-  TWILIO_ACCOUNT_SID: 'Twilio account SID for phone integration',
-  TWILIO_AUTH_TOKEN: 'Twilio auth token',
-  
-  // MCP Integration
-  MCP_SERVER_URL: 'MCP server URL for external integrations',
-  FIRECRAWL_API_KEY: 'Firecrawl API key for web scraping',
-  
-  // Deployment
-  NODE_ENV: 'Node environment (production/development)',
-  MAX_CALL_DURATION_MINUTES: 'Maximum call duration in minutes'
+  NODE_ENV: 'Environment (development/production)',
+  MAX_CALL_DURATION_MINUTES: 'Maximum call duration in minutes',
+  VERCEL_REGION: 'Vercel deployment region'
 };
 
-function validateEnvironment() {
-  console.log('🔍 Validating environment variables...\n');
-  
-  const missing = [];
-  const present = [];
-  const warnings = [];
+console.log('🔍 Environment Validation for Armenius Voice Assistant\n');
 
-  // Check required variables
-  Object.entries(requiredEnvVars).forEach(([key, description]) => {
-    if (process.env[key]) {
-      present.push({ key, description, required: true });
+let hasErrors = false;
+let hasWarnings = false;
+
+// Check required environment variables
+console.log('📋 Required Environment Variables:');
+for (const [varName, description] of Object.entries(requiredEnvVars)) {
+  const value = process.env[varName];
+  const status = value ? '✅' : '❌';
+  const display = value ? (varName.includes('KEY') || varName.includes('SECRET') || varName.includes('TOKEN') 
+    ? `${value.substring(0, 8)}...` 
+    : value) : 'MISSING';
+  
+  console.log(`  ${status} ${varName}: ${display}`);
+  if (varName.includes('KEY') || varName.includes('SECRET') || varName.includes('TOKEN')) {
+    console.log(`     └── ${description}`);
+  }
+  
+  if (!value) {
+    hasErrors = true;
+  }
+}
+
+console.log('\n📋 Optional Environment Variables:');
+for (const [varName, description] of Object.entries(optionalEnvVars)) {
+  const value = process.env[varName];
+  const status = value ? '✅' : '⚠️';
+  const display = value || 'NOT SET';
+  
+  console.log(`  ${status} ${varName}: ${display}`);
+  console.log(`     └── ${description}`);
+  
+  if (!value) {
+    hasWarnings = true;
+  }
+}
+
+// Test database connection if credentials are available
+if (process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
+  console.log('\n🗄️ Testing Database Connection...');
+  
+  try {
+    const supabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_ANON_KEY
+    );
+    
+    const { data, error } = await supabase
+      .from('products')
+      .select('id, name')
+      .limit(3);
+    
+    if (error) {
+      console.log(`  ❌ Database connection failed: ${error.message}`);
+      hasErrors = true;
     } else {
-      missing.push({ key, description, required: true });
-    }
-  });
-
-  // Check optional variables
-  Object.entries(optionalEnvVars).forEach(([key, description]) => {
-    if (process.env[key]) {
-      present.push({ key, description, required: false });
-    } else {
-      warnings.push({ key, description, required: false });
-    }
-  });
-
-  // Report results
-  if (present.length > 0) {
-    console.log('✅ Present environment variables:');
-    present.forEach(({ key, description, required }) => {
-      const badge = required ? '[REQUIRED]' : '[OPTIONAL]';
-      console.log(`   ${badge} ${key} - ${description}`);
-    });
-    console.log('');
-  }
-
-  if (warnings.length > 0) {
-    console.log('⚠️  Missing optional environment variables:');
-    warnings.forEach(({ key, description }) => {
-      console.log(`   [OPTIONAL] ${key} - ${description}`);
-    });
-    console.log('');
-  }
-
-  if (missing.length > 0) {
-    console.log('❌ Missing required environment variables:');
-    missing.forEach(({ key, description }) => {
-      console.log(`   [REQUIRED] ${key} - ${description}`);
-    });
-    console.log('');
-    
-    console.log('💡 To fix these issues:');
-    console.log('   1. Add missing variables to your .env file (local development)');
-    console.log('   2. Set them in your Vercel dashboard (production deployment)');
-    console.log('   3. Configure them in your CI/CD pipeline secrets');
-    console.log('');
-    
-    process.exit(1);
-  }
-
-  console.log('✅ All required environment variables are present!');
-  
-  if (warnings.length === 0) {
-    console.log('✅ All optional environment variables are also configured!');
-  }
-  
-  console.log('');
-  console.log(`📊 Summary: ${present.length} configured, ${missing.length} missing, ${warnings.length} optional missing`);
-  
-  return {
-    valid: missing.length === 0,
-    present: present.length,
-    missing: missing.length,
-    warnings: warnings.length
-  };
-}
-
-// Validate specific environment for different deployment targets
-function validateForDeployment(target = 'production') {
-  console.log(`🎯 Validating environment for ${target} deployment...\n`);
-  
-  const result = validateEnvironment();
-  
-  if (target === 'production') {
-    // Additional production checks
-    const productionChecks = [
-      {
-        key: 'NODE_ENV',
-        expected: 'production',
-        current: process.env.NODE_ENV,
-        message: 'NODE_ENV should be set to "production" for production deployments'
+      console.log(`  ✅ Database connection successful`);
+      console.log(`  📊 Found ${data?.length || 0} product records`);
+      if (data && data.length > 0) {
+        console.log(`  🏷️ Sample products: ${data.map(p => p.name).join(', ')}`);
       }
-    ];
-    
-    let productionIssues = 0;
-    
-    productionChecks.forEach(({ key, expected, current, message }) => {
-      if (current !== expected) {
-        console.log(`⚠️  Production warning: ${message}`);
-        console.log(`   Current: ${current || 'undefined'}, Expected: ${expected}`);
-        productionIssues++;
-      }
-    });
-    
-    if (productionIssues > 0) {
-      console.log(`\n📋 ${productionIssues} production environment warnings found`);
     }
+  } catch (error) {
+    console.log(`  ❌ Database connection error: ${error.message}`);
+    hasErrors = true;
+  }
+} else {
+  console.log('\n🗄️ Skipping database test (missing credentials)');
+}
+
+// Summary
+console.log('\n📊 Validation Summary:');
+if (hasErrors) {
+  console.log('  ❌ CRITICAL: Missing required environment variables');
+  console.log('  ⚠️  System will not function properly in production');
+  process.exit(1);
+} else {
+  console.log('  ✅ All required environment variables are present');
+  
+  if (hasWarnings) {
+    console.log('  ⚠️  Some optional variables are missing (system will still work)');
   }
   
-  return result;
+  console.log('  🎉 Environment configuration looks good!');
 }
 
-// Export for use in other scripts
-export { validateEnvironment, validateForDeployment };
-
-// Run validation if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const target = process.argv[2] || 'production';
-  validateForDeployment(target);
-}
+console.log('\n💡 To set missing variables in Vercel:');
+console.log('   1. Go to your Vercel dashboard');
+console.log('   2. Navigate to Project Settings → Environment Variables');
+console.log('   3. Add the missing variables with their proper values');
+console.log('   4. Redeploy the application');

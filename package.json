@@ -22,6 +22,8 @@
     "test:voice": "node scripts/test-voice-integration.js",
     "prepare": "husky",
     "validate-env": "node scripts/validate-env.js",
+    "validate-env:development": "NODE_ENV=development node scripts/validate-env.js",
+    "build-check": "node scripts/build-check.js",
     "pre-commit": "lint-staged",
     "deploy:production": "node scripts/deploy.js production",
     "deploy:preview": "node scripts/deploy.js preview",
@@ -67,12 +69,10 @@
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ],
     "*.{json,md,yml,yaml}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "repository": {
