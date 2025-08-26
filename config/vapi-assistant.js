@@ -470,10 +470,10 @@ Remember: You represent Armenius Store's commitment to excellent customer servic
   // Greek first message alternative (would be selected based on phone number or detection)
   firstMessageGreek: 'Καλώς ήρθατε στο Armenius Store! Είμαι η Μαρία και μπορώ να σας βοηθήσω με πληροφορίες προϊόντων, τιμές, ραντεβού και τεχνική υποστήριξη. Πώς μπορώ να σας βοηθήσω σήμερα;',
 
-  // Response timing
-  responseDelaySeconds: 0.4,
-  llmRequestDelaySeconds: 0.1,
-  numFastTurns: 3,
+  // Response timing - slower and more deliberate
+  responseDelaySeconds: 0.8,
+  llmRequestDelaySeconds: 0.3,
+  numFastTurns: 1,
 
   // End call conditions
   endCallMessage: 'Thank you for calling Armenius Store! Have a great day!',
