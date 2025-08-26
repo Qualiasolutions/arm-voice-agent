@@ -706,20 +706,58 @@ PRODUCTION_URL=https://your-production-domain.com
 
 This unified CI/CD pipeline transforms the development workflow from manual deployments to a fully automated, production-ready system with comprehensive quality gates, security scanning, and monitoring.
 
-## ⚠️ KNOWN ISSUES & SOLUTIONS
+## ⚠️ CRITICAL ISSUE: INVALID VAPI API KEY
 
-### Deployment-Related Issues
+### Current Production Problem
 
-#### Issue #1: Husky Build Failure in Production (RESOLVED)
-**Problem:** Husky installation failing during Vercel builds
-**Solution:** The package.json prepare script is already conditionally safe with `"prepare": "husky"`
-**Status:** ✅ **RESOLVED** - Current Husky configuration is production-safe
+**Status:** 🟡 **PARTIALLY FUNCTIONAL** - Frontend perfect, voice blocked by authentication
 
-#### Issue #2: Vapi SDK Loading
-**Problem:** SDK timing issues can occur during initialization
-**Solution:** Frontend includes proper SDK loading with fallbacks in `frontend/index.html`
-**Debug Command:** Check browser console for `window.Vapi` availability
-**Status:** ✅ **MONITORED** - Health checks validate SDK loading
+#### CRITICAL: Invalid Vapi.ai API Key 
+**Problem:** Vapi.ai API returning 401 Unauthorized during voice calls
+**Error:** `POST https://api.vapi.ai/call/web 401 (Unauthorized)`
+**Current Key:** `32b555af-1fbc-4b6c-81c0-c940b07c6da2` (hardcoded in CallInterface.tsx:50)
+**Impact:** Voice calls cannot be initiated - UI works perfectly but fails at API level
+
+**Evidence from Browser Console:**
+```javascript
+index-B8x-xL3G.js:43 ❌ Failed to initialize Vapi voice system
+POST https://api.vapi.ai/call/web 401 (Unauthorized)
+Response {data: null, error: "Unauthorized", statusCode: 401}
+```
+
+**What's Working:** ✅
+- React frontend loads perfectly
+- Vapi SDK initializes without errors  
+- UI shows "Calling..." and "Ringing" states correctly
+- All BMAD production enhancements active
+- Error boundaries and logging functional
+- Clean deployment pipeline
+
+**What's Broken:** ❌
+- API call to Vapi.ai returns 401 Unauthorized
+- Voice calls cannot be established
+- Customer cannot interact with Maria
+
+**IMMEDIATE SOLUTION REQUIRED:**
+1. **Obtain Valid API Key**: Get working Vapi.ai API key from dashboard
+2. **Update File**: Replace key in `frontend/src/pages/CallInterface.tsx:50`
+3. **Verify Assistant**: Confirm assistant ID `89b5d633-974a-4b58-a6b5-cdbba8c2726a` is valid
+
+**Code to Update:**
+```typescript
+// frontend/src/pages/CallInterface.tsx:50
+const vapiInstance = new Vapi('REPLACE_WITH_VALID_VAPI_API_KEY')
+```
+
+### Resolved Issues ✅
+
+#### Issue #1: Husky Build Failure (RESOLVED)
+**Solution:** Updated to `"prepare": "husky || exit 0"`
+**Status:** ✅ **RESOLVED** - Production builds work perfectly
+
+#### Issue #2: Vapi SDK Loading (RESOLVED)  
+**Solution:** Using npm package instead of CDN/window object
+**Status:** ✅ **RESOLVED** - SDK loads and initializes correctly
 
 ### Available Enhancement Plans
 
