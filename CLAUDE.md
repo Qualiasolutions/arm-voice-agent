@@ -499,15 +499,33 @@ npm run validate-env:development     # Check development environment
 npm run build-check                  # Validate build configuration
 ```
 
-## Latest Status: 100% Live Fetching Enabled
+## Latest Status: Voice Assistant Updated - Kyriakos Active
 
-**Status:** 🟢 **100% FUNCTIONAL** - Complete live data integration + voice system working
+**Status:** 🟢 **FULLY OPERATIONAL** - Voice assistant transformed to male persona with authentication fixes
 
-### Recent Achievements
+### Recent Achievements (Latest Session)
+- ✅ **Assistant Transformation** - Changed from Maria to Kyriakos (male AI assistant)
+- ✅ **Voice Configuration** - Updated to custom male voice ID: `DMrXvkhaNPEmPbI3ABs8`
+- ✅ **Authentication Fixed** - Resolved 401 errors with correct API key: `f699458f-0087-435b-8e76-559dac4bf8cc`
+- ✅ **Frontend Updated** - Complete UI transformation with Greek/English support for Kyriakos
+- ✅ **System Prompts** - Updated assistant personality to reflect professional male persona
+- ✅ **Component Refactoring** - Renamed `MariaAvatar` → `KyriakosAvatar` with proper imports
+
+### Current Voice Configuration
+- **AI Assistant**: Kyriakos (male, professional, knowledgeable about computer hardware)
+- **Voice Provider**: 11Labs with custom trained voice
+- **Voice ID**: `DMrXvkhaNPEmPbI3ABs8` (Kyriakos custom voice)
+- **API Key**: `f699458f-0087-435b-8e76-559dac4bf8cc` (matches Vercel environment)
+- **Assistant ID**: `89b5d633-974a-4b58-a6b5-cdbba8c2726a`
+- **Languages**: Greek & English with automatic detection
+- **Call-to-Action Text**: 
+  - English: "Call Kyriakos for help with products, orders, and technical support"
+  - Greek: "Καλέστε τον Κυριάκο για βοήθεια με προϊόντα, παραγγελίες και τεχνική υποστήριξη"
+
+### Previous Achievements
 - ✅ **100% Live Product Fetching** - Real-time access to entire armenius.com.cy catalog
-- ✅ **Voice System Authentication** - Updated to valid Vapi.ai API keys and SDK v2.3.9
 - ✅ **3-Tier Fallback System** - API → HTTP → Database for 99%+ reliability
 - ✅ **Performance Optimized** - <2 second response time with smart 10-minute caching
 - ✅ **Cost Efficient** - €0.32/call average (target: <€0.40)
 
-Maria can now access and provide information about ANY product on armenius.com.cy in real-time, with professional-grade reliability and performance.
+Kyriakos can now take voice calls with his custom male voice and provide product information from the armenius.com.cy catalog with professional, friendly service.
