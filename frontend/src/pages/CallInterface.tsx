@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import MariaAvatar from '@/components/call/MariaAvatar'
+import KyriakosAvatar from '@/components/call/KyriakosAvatar'
 import CallButton from '@/components/call/CallButton'
 import CallStatus from '@/components/call/CallStatus'
 import { 
@@ -319,7 +319,7 @@ const CallInterface: React.FC = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-400/10 to-amber-600/10 rounded-3xl blur-3xl" />
                 <div className="relative bg-white/95 backdrop-blur-sm rounded-3xl p-12 shadow-2xl border border-amber-200/20">
-                  <MariaAvatar 
+                  <KyriakosAvatar 
                     size="xl" 
                     isActive={callState === 'connected'} 
                     className="mb-8"
@@ -335,8 +335,8 @@ const CallInterface: React.FC = () => {
                       </h2>
                       <p className="text-lg text-gray-600 max-w-md mx-auto">
                         {language === 'el'
-                          ? 'Καλέστε τη Μαρία για βοήθεια με προϊόντα, παραγγελίες και τεχνική υποστήριξη'
-                          : 'Call Maria for help with products, orders, and technical support'
+                          ? 'Καλέστε τον Κυριάκο για βοήθεια με προϊόντα, παραγγελίες και τεχνική υποστήριξη'
+                          : 'Call Kyriakos for help with products, orders, and technical support'
                         }
                       </p>
                     </div>

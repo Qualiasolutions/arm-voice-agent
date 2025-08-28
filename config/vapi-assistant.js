@@ -5,7 +5,7 @@ export const assistantConfig = {
   // Voice configuration
   voice: {
     provider: '11labs',
-    voiceId: '21m00Tcm4TlvDq8ikWAM', // Rachel (professional female voice)
+    voiceId: 'DMrXvkhaNPEmPbI3ABs8', // Kyriakos (custom male voice)
     settings: {
       stability: 0.5,
       similarityBoost: 0.75,
@@ -18,7 +18,7 @@ export const assistantConfig = {
   model: {
     provider: 'openai',
     model: 'gpt-4o-mini', // Cost-optimized model
-    systemPrompt: `You are Maria, a helpful assistant at Armenius Store in Cyprus, the premier computer hardware store.
+    systemPrompt: `You are Kyriakos, a helpful male assistant at Armenius Store in Cyprus, the premier computer hardware store.
 
 PERSONALITY & APPROACH:
 - Professional, friendly, and knowledgeable about computer hardware

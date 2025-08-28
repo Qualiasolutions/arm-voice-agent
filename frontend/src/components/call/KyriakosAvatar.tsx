@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Bot, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-interface MariaAvatarProps {
+interface KyriakosAvatarProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
   isActive?: boolean
   className?: string
@@ -18,7 +18,7 @@ const sizeClasses = {
   xl: 'size-32'
 }
 
-const MariaAvatar: React.FC<MariaAvatarProps> = ({ 
+const KyriakosAvatar: React.FC<KyriakosAvatarProps> = ({ 
   size = 'lg', 
   isActive = false, 
   className,
@@ -51,8 +51,8 @@ const MariaAvatar: React.FC<MariaAvatarProps> = ({
           "border-4 border-white shadow-2xl bg-gradient-to-br from-blue-500 to-purple-600 relative z-10"
         )}>
           <AvatarImage 
-            src="/maria-avatar.png" 
-            alt="Maria AI Assistant"
+            src="/kyriakos-avatar.png" 
+            alt="Kyriakos AI Assistant"
             className="object-cover"
           />
           <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
@@ -91,7 +91,7 @@ const MariaAvatar: React.FC<MariaAvatarProps> = ({
           {/* AI Name and Title */}
           <div className="text-center space-y-1">
             <h3 className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              MARIA
+              KYRIAKOS
             </h3>
             <p className="text-sm text-gray-600 font-medium">
               AI Shopping Assistant
@@ -126,4 +126,4 @@ const MariaAvatar: React.FC<MariaAvatarProps> = ({
   )
 }
 
-export default MariaAvatar
+export default KyriakosAvatar
