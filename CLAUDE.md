@@ -63,7 +63,6 @@ npm test                      # Run all Vitest tests
 npm run test:watch           # Run tests in watch mode
 npm run test:coverage        # Generate test coverage report
 npm run test:mcp             # Test MCP setup and integration
-npm run test:voice           # Test full voice integration pipeline
 
 # Code Quality
 npm run lint                 # Run ESLint on all JS/TS files
@@ -81,6 +80,12 @@ npm run validate-env         # Validate environment variables
 npm run validate-env:development  # Validate dev environment
 npm run deploy               # Deploy to Vercel production
 npm run health-check         # Check system health endpoints
+npm run build-check          # Verify build compatibility
+npm run monitor              # Monitor production health
+
+# Utility & Maintenance
+npm run cache:warm           # Warm up function cache
+npm run logs                 # Follow Vercel deployment logs
 
 # Function Testing (Individual Functions)
 node -e "
@@ -189,6 +194,8 @@ TWILIO_AUTH_TOKEN=your_twilio_token
 - **Coverage**: v8 provider with 70% threshold across all metrics
 - **Setup**: `tests/setup.js` for test initialization and mocking
 - **Aliases**: `@` maps to `./lib`, `@tests` maps to `./tests`
+- **Exclusions**: Frontend directory excluded from backend test coverage
+- **Test Files**: Located in `tests/` directory with `.test.js` suffix
 
 ### API Endpoints
 - **Voice Webhook**: `/api/vapi` - Primary webhook handler
@@ -221,7 +228,12 @@ npm run validate-env
 ### Vercel Configuration (`vercel.json`)
 - **Build Command**: Frontend build with npm install
 - **Functions**: 30-second timeout for voice processing
-- **Cron Jobs**: Automated cache warming and product sync
+- **Region**: Frankfurt (fra1) for optimal European performance
+- **Cron Jobs**: 
+  - Cache warmup (every 6 hours)
+  - Daily reports (9 AM)
+  - Cost analysis (every 3 hours)  
+  - Product sync (6 AM daily)
 - **Rewrites**: API routing and SPA fallback
 - **Headers**: CORS and caching policies
 

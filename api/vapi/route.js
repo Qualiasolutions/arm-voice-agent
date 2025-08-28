@@ -19,7 +19,7 @@ async function ensureInitialized() {
 }
 
 // Webhook signature verification
-function verifyVapiSignature(request, body) {
+function verifyVapiSignature(request, rawBody) {
   if (!process.env.VAPI_SERVER_SECRET) {
     console.warn('VAPI_SERVER_SECRET not configured - skipping signature verification');
     return true; // Allow in development
@@ -32,13 +32,31 @@ function verifyVapiSignature(request, body) {
   }
 
   try {
+    // Use raw body string, not JSON.stringify of parsed body
+    const bodyString = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody);
+    
     const expectedSignature = crypto
       .createHmac('sha256', process.env.VAPI_SERVER_SECRET)
-      .update(JSON.stringify(body))
+      .update(bodyString, 'utf8')
       .digest('hex');
 
+    // Clean signature (remove sha256= prefix if present)
+    const cleanSignature = signature.replace(/^sha256=/, '');
+    
+    console.log('Signature verification:', {
+      received: cleanSignature.substring(0, 10) + '...',
+      expected: expectedSignature.substring(0, 10) + '...',
+      bodyLength: bodyString.length
+    });
+
+    // Compare using timing-safe comparison
+    if (cleanSignature.length !== expectedSignature.length) {
+      console.error('Signature length mismatch');
+      return false;
+    }
+
     return crypto.timingSafeEqual(
-      Buffer.from(signature, 'hex'),
+      Buffer.from(cleanSignature, 'hex'),
       Buffer.from(expectedSignature, 'hex')
     );
   } catch (error) {
@@ -54,11 +72,14 @@ export async function POST(request) {
   try {
     await ensureInitialized();
 
+    // Get raw body for signature verification
+    const rawBody = await request.text();
+    
     // Parse request body
-    const body = await request.json();
+    const body = JSON.parse(rawBody);
     
     // Verify webhook signature
-    if (!verifyVapiSignature(request, body)) {
+    if (!verifyVapiSignature(request, rawBody)) {
       console.error('Invalid webhook signature');
       return new Response('Unauthorized', { status: 401 });
     }
