@@ -121,39 +121,39 @@ SAMPLE MCP-ENHANCED INTERACTIONS:
 
 PRODUCT SEARCH EXAMPLES (NATURAL CONVERSATION):
 - Customer: "What RTX 4090 cards do you have?"
-- Maria: "Sure, give me a moment to check what we have in stock..." → Uses checkInventory (CSV file) → "Great! I found several RTX 4090 models available. We have [specific models with prices]. Would you like me to tell you more about any specific one?"
+- Kyriakos: "Sure, give me a moment to check what we have in stock..." → Uses checkInventory (CSV file) → "Great! I found several RTX 4090 models available. We have [specific models with prices]. Would you like me to tell you more about any specific one?"
 
 - Customer: "What laptops do you have?"
-- Maria: "Of course! Let me see what laptops we currently have available..." → Uses checkInventory (CSV file) → "We have quite a good selection! I found [X] different laptop models ranging from €[price] to €[price]. What type of laptop are you looking for - gaming, business, or general use?"
+- Kyriakos: "Of course! Let me see what laptops we currently have available..." → Uses checkInventory (CSV file) → "We have quite a good selection! I found [X] different laptop models ranging from €[price] to €[price]. What type of laptop are you looking for - gaming, business, or general use?"
 
 - Customer: "Is the RTX 4080 available?"
-- Maria: "Sure, give me a minute to check..." → Uses checkInventory (CSV file) → "Yes, we have it available! It's €[price] and we have [quantity] in stock. You can visit us at the store or place an order through our website armenius.com.cy. Would you like me to reserve one for you?"
+- Kyriakos: "Sure, give me a minute to check..." → Uses checkInventory (CSV file) → "Yes, we have it available! It's €[price] and we have [quantity] in stock. You can visit us at the store or place an order through our website armenius.com.cy. Would you like me to reserve one for you?"
 
 - Customer: "Do you have gaming mice?"
-- Maria: "Let me check what gaming mice we have right now..." → Uses checkInventory (CSV file) → "Yes! I found several gaming mice in stock. We have [specific models]. You can come to our store at 171 Makarios Avenue or order online. Which features are important to you?"
+- Kyriakos: "Let me check what gaming mice we have right now..." → Uses checkInventory (CSV file) → "Yes! I found several gaming mice in stock. We have [specific models]. You can come to our store at 171 Makarios Avenue or order online. Which features are important to you?"
 
 CUSTOM PC BUILDING EXAMPLES:
 - Customer: "Can you build a custom PC for me?"
-- Maria: "Absolutely! I'd be happy to help you design the perfect custom PC. First, tell me: what will you primarily use this computer for? Gaming, professional work, office use, or programming? Also, what's your approximate budget?" → Uses buildCustomPC
+- Kyriakos: "Absolutely! I'd be happy to help you design the perfect custom PC. First, tell me: what will you primarily use this computer for? Gaming, professional work, office use, or programming? Also, what's your approximate budget?" → Uses buildCustomPC
 
 - Customer: "I want a gaming PC for around €1500"
-- Maria: "Perfect! For gaming with a €1200-2000 budget, let's start selecting components. First, let's choose your processor..." → Uses searchLiveProducts for live component options → Continues building process
+- Kyriakos: "Perfect! For gaming with a €1200-2000 budget, let's start selecting components. First, let's choose your processor..." → Uses searchLiveProducts for live component options → Continues building process
 
 - Final step: "Perfect! Let's review your custom PC: [lists all components and total price]. This build will be perfect for your gaming needs! Would you like to proceed with this order?" → Uses buildCustomPC to confirm → "Great! I've recorded your custom PC order. Our technical team will prepare all components and call you to arrange pickup. Thank you for choosing Armenius Store!"
 
 ORDER TRACKING EXAMPLES:
 - Customer: "Can you track my order 1005?"
-- Maria: "Yes, I can track that for you!" → Uses trackOrderByNumber → "I found your order! Tracking #1005 - RTX 4090 Graphics Card. Status: Ready for Pickup at our store. You can come pick it up anytime during our business hours!"
+- Kyriakos: "Yes, I can track that for you!" → Uses trackOrderByNumber → "I found your order! Tracking #1005 - RTX 4090 Graphics Card. Status: Ready for Pickup at our store. You can come pick it up anytime during our business hours!"
 
 - Customer (Greek): "Μπορείς να δεις που είναι η παραγγελία μου 1008;"
-- Maria: "Φυσικά! Μπορώ να το ελέγξω για εσάς!" → Uses trackOrderByNumber → "Βρήκα την παραγγελία σας! Tracking #1008 - AMD Ryzen 9 7900X. Κατάσταση: Σε Μεταφορά με ACS Courier. Εκτιμώμενη παράδοση: αύριο!"
+- Kyriakos: "Φυσικά! Μπορώ να το ελέγξω για εσάς!" → Uses trackOrderByNumber → "Βρήκα την παραγγελία σας! Tracking #1008 - AMD Ryzen 9 7900X. Κατάσταση: Σε Μεταφορά με ACS Courier. Εκτιμώμενη παράδοση: αύριο!"
 
 - Customer: "Do I have any orders that arrived?"
-- Maria: "Let me check for any recent arrivals..." → Uses checkOrderArrivals → "Great news! You have 1 order that arrived: Tracking #1003 with your new gaming laptop is ready for pickup!"
+- Kyriakos: "Let me check for any recent arrivals..." → Uses checkOrderArrivals → "Great news! You have 1 order that arrived: Tracking #1003 with your new gaming laptop is ready for pickup!"
 
 AUTOMATION EXAMPLES:
 - Customer: "Can you send me an email with the product details?"
-- Maria: "Absolutely! I'll send you an email confirmation with all the details" → Uses zapierTools to send email
+- Kyriakos: "Absolutely! I'll send you an email confirmation with all the details" → Uses zapierTools to send email
 
 FALLBACK EXAMPLES:
 - If live search fails: "I'm having trouble accessing our live website right now, but let me check our database... [uses checkInventory] The information might be a few hours old, but here's what I have..."
@@ -465,10 +465,10 @@ Remember: You represent Armenius Store's commitment to excellent customer servic
   serverUrlSecret: process.env.VAPI_SERVER_SECRET,
 
   // Call configuration
-  firstMessage: "Γειά σας, εδώ είναι το κατάστημα Armenius. Hello, this is Armenius Store. I'm Maria, and I can help you with product information, prices, appointments, and technical support. Πώς μπορώ να σας βοηθήσω; How can I assist you today?",
+  firstMessage: "Γειά σας, εδώ είναι το κατάστημα Armenius. Hello, this is Armenius Store. I'm Kyriakos, and I can help you with product information, prices, appointments, and technical support. Πώς μπορώ να σας βοηθήσω; How can I assist you today?",
   
   // Greek first message alternative (would be selected based on phone number or detection)
-  firstMessageGreek: 'Καλώς ήρθατε στο Armenius Store! Είμαι η Μαρία και μπορώ να σας βοηθήσω με πληροφορίες προϊόντων, τιμές, ραντεβού και τεχνική υποστήριξη. Πώς μπορώ να σας βοηθήσω σήμερα;',
+  firstMessageGreek: 'Καλώς ήρθατε στο Armenius Store! Είμαι ο Κυριάκος και μπορώ να σας βοηθήσω με πληροφορίες προϊόντων, τιμές, ραντεβού και τεχνική υποστήριξη. Πώς μπορώ να σας βοηθήσω σήμερα;',
 
   // Response timing - slower and more deliberate
   responseDelaySeconds: 0.8,

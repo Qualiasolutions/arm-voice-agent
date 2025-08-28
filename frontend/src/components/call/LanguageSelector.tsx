@@ -15,13 +15,13 @@ const languages = {
     code: 'en',
     name: 'English',
     flag: '🇬🇧',
-    greeting: 'Hello! How can Maria help you today?'
+    greeting: 'Hello! How can Kyriakos help you today?'
   },
   el: {
     code: 'el',
     name: 'Ελληνικά',
     flag: '🇬🇷',
-    greeting: 'Γεια σας! Πώς μπορεί η Μαρία να σας βοηθήσει σήμερα;'
+    greeting: 'Γεια σας! Πώς μπορεί ο Κυριάκος να σας βοηθήσει σήμερα;'
   }
 }
 
@@ -43,7 +43,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             className={cn(
               "min-w-[80px] font-medium transition-all duration-200",
               selectedLanguage === lang.code
-                ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
+                ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-lg"
                 : "hover:bg-gray-50 text-gray-600"
             )}
           >
@@ -65,8 +65,8 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             className={cn(
               "flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 border-2",
               selectedLanguage === lang.code
-                ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white border-transparent shadow-lg transform scale-105"
-                : "bg-white/80 text-gray-600 border-gray-200 hover:border-blue-300 hover:bg-blue-50"
+                ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white border-transparent shadow-lg transform scale-105"
+                : "bg-white/80 text-gray-600 border-gray-200 hover:border-amber-300 hover:bg-amber-50"
             )}
           >
             <span className="text-lg">{lang.flag}</span>
@@ -96,7 +96,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                 className={cn(
                   "flex items-center space-x-3 px-6 py-4 rounded-xl transition-all duration-300 font-medium",
                   selectedLanguage === lang.code
-                    ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transform scale-105"
+                    ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-lg transform scale-105"
                     : "text-gray-600 hover:bg-gray-50 hover:scale-102"
                 )}
               >
@@ -118,9 +118,9 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
 
       {/* Preview Message */}
       <div className="text-center">
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 border border-blue-100">
+        <div className="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg p-4 border border-amber-100">
           <p className="text-sm text-gray-600 mb-2 font-medium">
-            Maria will greet you in:
+            Kyriakos will greet you in:
           </p>
           <p className="text-gray-800 font-medium italic">
             "{languages[selectedLanguage].greeting}"
@@ -136,7 +136,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             className={cn(
               "p-4 rounded-lg border-2 transition-all duration-300",
               selectedLanguage === lang.code
-                ? "border-blue-200 bg-blue-50 shadow-lg"
+                ? "border-amber-200 bg-amber-50 shadow-lg"
                 : "border-gray-100 bg-gray-50 opacity-60"
             )}
           >
@@ -144,7 +144,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               <span className="text-xl">{lang.flag}</span>
               <h3 className="font-semibold text-gray-800">{lang.name}</h3>
               {selectedLanguage === lang.code && (
-                <Badge variant="default" className="bg-blue-500">Selected</Badge>
+                <Badge variant="default" className="bg-amber-500">Selected</Badge>
               )}
             </div>
             <p className="text-sm text-gray-600">

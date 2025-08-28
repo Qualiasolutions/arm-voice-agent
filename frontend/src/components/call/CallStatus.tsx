@@ -58,16 +58,16 @@ const CallStatus: React.FC<CallStatusProps> = ({
   const getStatusContent = () => {
     const content = {
       en: {
-        connecting: 'Connecting to Maria...',
-        ringing: 'Calling Maria...',
-        connected: 'Connected with Maria',
+        connecting: 'Connecting to Kyriakos...',
+        ringing: 'Calling Kyriakos...',
+        connected: 'Connected with Kyriakos',
         ended: 'Call Ended',
         error: 'Connection Failed'
       },
       el: {
-        connecting: 'Σύνδεση με τη Μαρία...',
-        ringing: 'Καλείται η Μαρία...',
-        connected: 'Συνδεδεμένος με τη Μαρία',
+        connecting: 'Σύνδεση με τον Κυριάκο...',
+        ringing: 'Καλείται ο Κυριάκος...',
+        connected: 'Συνδεδεμένος με τον Κυριάκο',
         ended: 'Η κλήση τερματίστηκε',
         error: 'Σφάλμα σύνδεσης'
       }
@@ -112,7 +112,7 @@ const CallStatus: React.FC<CallStatusProps> = ({
             }
             className={cn(
               callState === 'connected' ? 'bg-gradient-to-r from-emerald-500 to-green-500' :
-              callState === 'ringing' ? 'bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse' :
+              callState === 'ringing' ? 'bg-gradient-to-r from-amber-500 to-yellow-500 animate-pulse' :
               ''
             )}
           >
@@ -122,8 +122,8 @@ const CallStatus: React.FC<CallStatusProps> = ({
 
         {/* Call Duration (when connected) */}
         {callState === 'connected' && (
-          <div className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
-            <Clock className="size-5 text-blue-600" />
+          <div className="flex items-center justify-center space-x-2 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg p-4">
+            <Clock className="size-5 text-amber-600" />
             <span className="text-2xl font-mono font-bold text-gray-800">
               {formatDuration(duration)}
             </span>
@@ -173,12 +173,12 @@ const CallStatus: React.FC<CallStatusProps> = ({
 
         {/* Waveform Visualization (when connected) */}
         {callState === 'connected' && (
-          <div className="flex items-center justify-center space-x-1 h-16 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
+          <div className="flex items-center justify-center space-x-1 h-16 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg p-4">
             {[...Array(12)].map((_, i) => (
               <div
                 key={i}
                 className={cn(
-                  "bg-gradient-to-t from-blue-400 to-purple-400 rounded-full opacity-60",
+                  "bg-gradient-to-t from-amber-400 to-yellow-400 rounded-full opacity-60",
                   "animate-pulse"
                 )}
                 style={{
@@ -225,8 +225,8 @@ const CallStatus: React.FC<CallStatusProps> = ({
               </h4>
               <p className="text-sm text-gray-600">
                 {language === 'el' 
-                  ? 'Ελπίζουμε ότι η Μαρία σας βοήθησε με την αίτησή σας.'
-                  : 'We hope Maria was able to help with your request.'
+                  ? 'Ελπίζουμε ότι ο Κυριάκος σας βοήθησε με την αίτησή σας.'
+                  : 'We hope Kyriakos was able to help with your request.'
                 }
               </p>
             </div>

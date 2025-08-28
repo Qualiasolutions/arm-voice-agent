@@ -27,11 +27,11 @@ const CallButton: React.FC<CallButtonProps> = ({
       case 'idle':
         return {
           icon: <Phone className="size-8" />,
-          text: 'Call Maria Now',
+          text: 'Call Kyriakos Now',
           subtext: 'Start AI-powered assistance',
           onClick: onStartCall,
           variant: 'default' as const,
-          className: 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300'
+          className: 'bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300'
         }
       
       case 'connecting':
@@ -41,17 +41,17 @@ const CallButton: React.FC<CallButtonProps> = ({
           subtext: 'Please wait',
           onClick: () => {},
           variant: 'secondary' as const,
-          className: 'bg-gradient-to-r from-yellow-500 to-orange-500 cursor-wait'
+          className: 'bg-gradient-to-r from-yellow-400 to-amber-500 cursor-wait'
         }
       
       case 'ringing':
         return {
           icon: <PhoneCall className="size-8 animate-bounce" />,
           text: 'Calling...',
-          subtext: 'Maria will answer shortly',
+          subtext: 'Kyriakos will answer shortly',
           onClick: onEndCall,
           variant: 'secondary' as const,
-          className: 'bg-gradient-to-r from-green-500 to-emerald-500 animate-pulse'
+          className: 'bg-gradient-to-r from-yellow-500 to-amber-500 animate-pulse'
         }
       
       case 'connected':
@@ -77,7 +77,7 @@ const CallButton: React.FC<CallButtonProps> = ({
       default:
         return {
           icon: <Phone className="size-8" />,
-          text: 'Call Maria',
+          text: 'Call Kyriakos',
           subtext: '',
           onClick: onStartCall,
           variant: 'default' as const,
@@ -179,7 +179,7 @@ const CallButton: React.FC<CallButtonProps> = ({
             'bg-red-400'
           )} />
           <span className="text-sm font-medium text-gray-700">
-            {callState === 'connecting' && 'Connecting to Maria...'}
+            {callState === 'connecting' && 'Connecting to Kyriakos...'}
             {callState === 'ringing' && 'Ringing...'}
             {callState === 'connected' && 'Connected'}
             {callState === 'error' && 'Connection failed'}
