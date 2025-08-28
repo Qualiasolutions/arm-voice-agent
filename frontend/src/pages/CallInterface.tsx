@@ -8,7 +8,9 @@ import MariaAvatar from '@/components/call/MariaAvatar'
 import CallButton from '@/components/call/CallButton'
 import CallStatus from '@/components/call/CallStatus'
 import { 
-  Building2
+  Building2, 
+  Clock,
+  MapPin
 } from 'lucide-react'
 
 type CallState = 'idle' | 'connecting' | 'ringing' | 'connected' | 'ended' | 'error'
@@ -264,7 +266,7 @@ const CallInterface: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-amber-50/30">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -279,7 +281,7 @@ const CallInterface: React.FC = () => {
                 />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
                   ARMENIUS STORE
                 </h1>
                 <p className="text-sm text-gray-600 font-medium">
@@ -315,8 +317,8 @@ const CallInterface: React.FC = () => {
             {/* Hero Section */}
             <div className="text-center space-y-6">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-3xl blur-3xl" />
-                <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-12 shadow-2xl border border-white/50">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-400/10 to-amber-600/10 rounded-3xl blur-3xl" />
+                <div className="relative bg-white/95 backdrop-blur-sm rounded-3xl p-12 shadow-2xl border border-amber-200/20">
                   <MariaAvatar 
                     size="xl" 
                     isActive={callState === 'connected'} 
@@ -370,26 +372,26 @@ const CallInterface: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-8 mt-16">
+      <footer className="bg-gradient-to-r from-white to-gray-100 border-t border-amber-200/30 py-8 mt-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="space-y-4">
             <div className="flex items-center justify-center space-x-2">
-              <Building2 className="size-6" />
-              <span className="text-xl font-bold">ARMENIUS STORE CYPRUS</span>
+              <Building2 className="size-6 text-amber-700" />
+              <span className="text-xl font-bold text-gray-800">ARMENIUS STORE CYPRUS</span>
             </div>
-            <p className="text-gray-300">
+            <p className="text-gray-600">
               {language === 'el' 
                 ? 'Το κορυφαίο κατάστημα υπολογιστών και ηλεκτρονικών της Κύπρου'
                 : "Cyprus' Premier Computer & Electronics Store"
               }
             </p>
-            <div className="border-t border-gray-700 pt-4">
-              <p className="text-sm text-gray-400">
+            <div className="border-t border-amber-200/30 pt-4">
+              <p className="text-sm text-gray-500">
                 Powered by{' '}
-                <span className="font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <span className="font-semibold bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
                   Qualia Solutions
                 </span>
-                {' '}• v1.0.0
+                {' '}• Professional AI Voice Assistant
               </p>
             </div>
           </div>
