@@ -30,13 +30,13 @@ const CallInterface: React.FC = () => {
   // Initialize Vapi instance on component mount
   useEffect(() => {
     logger.info('Initializing Vapi voice system', {
-      apiKey: '32b555af-1fbc-4b6c-81c0-c940b07c6da2'.substring(0, 8) + '***',
+      apiKey: 'f699458f-0087-435b-8e76-559dac4bf8cc'.substring(0, 8) + '***',
       component: 'CallInterface',
       vapiImported: !!Vapi
     });
     
     try {
-      const vapiInstance = new Vapi('560d7bb9-d7ee-4e79-bbcf-1003c6b81ae6')
+      const vapiInstance = new Vapi('f699458f-0087-435b-8e76-559dac4bf8cc')
       vapiRef.current = vapiInstance
 
       // Set up event listeners with comprehensive logging
