@@ -387,27 +387,6 @@ Remember: You represent Armenius Store's commitment to excellent customer servic
         }
       },
       {
-        name: 'getProductFromSheet',
-        description: 'Look up detailed product information from the Armenius Store Google Sheet by name, keyword, or SKU. Returns availability, price in euros (€), and product details.',
-        parameters: {
-          type: 'object',
-          properties: {
-            product_name: {
-              type: 'string',
-              description: 'Product name or description to search for'
-            },
-            product_sku: {
-              type: 'string',
-              description: 'Product SKU or code if available'
-            },
-            keyword: {
-              type: 'string',
-              description: 'Keyword or search term related to the product'
-            }
-          }
-        }
-      },
-      {
         name: 'checkOrderArrivals',
         description: 'Check if customer has any recent order arrivals ready for pickup',
         parameters: {
