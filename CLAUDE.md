@@ -131,6 +131,10 @@ npm run health-check         # Check system health endpoints
 npm run monitor              # Monitor production system status
 vercel --prod                # Manual production deployment
 
+# Security & Audit
+audit-ci                     # Run security audit (via audit-ci.json config)
+npm audit                    # Standard npm security audit
+
 # Function Development Testing
 # To test a specific function locally:
 node -e "
@@ -264,10 +268,13 @@ MAX_CALL_DURATION_MINUTES=15
 
 ### Testing URLs and Endpoints
 - **Frontend Dashboard:** http://localhost:5173 (dev) / your-production-url (prod)
-- **Test Interface:** `public/test.html` (quick voice testing)
 - **Health Check:** `/api/vapi/health` - Returns function registry stats and system status
 - **Webhook Endpoint:** `/api/vapi` (primary) or `/api/vapi/route` (direct Edge)
-- **Cron Jobs:** `/api/cron/warmup-cache`, `/api/cron/daily-report`, `/api/cron/cost-analysis`
+- **Cron Jobs:** 
+  - `/api/cron/warmup-cache` - Pre-warm cache (every 6 hours)
+  - `/api/cron/daily-report` - Analytics report (daily at 9 AM)
+  - `/api/cron/cost-analysis` - Cost tracking (every 3 hours)
+  - `/api/cron/product-sync` - Sync products from website (daily at 6 AM)
 
 ### Key API Responses
 The webhook handler (`api/vapi/route.js`) responds to these Vapi.ai event types:
@@ -314,6 +321,7 @@ import('./lib/functions/index.js').then(async m => {
 - **Environment:** Isolated test environment with mock secrets
 - **Coverage:** v8 provider with 70% threshold across branches, functions, lines, statements
 - **Exclusions:** Frontend directory excluded from backend test coverage
+- **Aliases:** `@` maps to `./lib` directory, `@tests` maps to `./tests` directory
 
 Test files cover:
 - **Webhook processing:** Request validation, function execution, error handling
