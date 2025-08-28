@@ -98,12 +98,20 @@ npm test                      # Run all Vitest tests
 npm run test:watch           # Run tests in watch mode
 npm run test:coverage        # Generate test coverage report
 npm test tests/webhook.test.js     # Test webhook handlers only
+npm run test:mcp             # Test MCP setup and integration
+npm run test:voice           # Test full voice integration pipeline
 
 # Code Quality & Type Checking
 npm run lint                 # Run ESLint on all JS/TS files
 npm run lint:fix             # Auto-fix ESLint issues
 npm run type-check           # Run TypeScript type checking
-cd frontend && npm run build # Build frontend for production
+npm run prepare              # Set up Husky git hooks
+npm run pre-commit           # Run pre-commit checks (lint-staged)
+
+# Environment & Configuration
+npm run validate-env         # Validate production environment variables
+npm run validate-env:development  # Validate development environment variables
+npm run build-check          # Validate build configuration
 
 # Database Operations
 npm run db:migrate           # Apply database migrations (supabase db push)
@@ -116,7 +124,11 @@ npm run cache:warm           # Pre-warm cache with common queries
 
 # Deployment & Monitoring
 npm run deploy               # Deploy to Vercel production
+npm run deploy:production    # Deploy to production with validation
+npm run deploy:preview       # Deploy to preview environment
 npm run logs                 # Follow Vercel deployment logs
+npm run health-check         # Check system health endpoints
+npm run monitor              # Monitor production system status
 vercel --prod                # Manual production deployment
 
 # Function Development Testing
@@ -160,7 +172,7 @@ import('./lib/functions/index.js').then(async m => {
 ## Critical Business Logic
 
 ### Function Registry Pattern (MUST UNDERSTAND)
-The Function Registry (`lib/functions/index.js`) is the core architectural pattern:
+The Function Registry (`lib/functions/index.js`) is the core architectural pattern that dynamically loads and manages all voice functions:
 
 ```javascript
 // How to add a new function:
@@ -187,13 +199,15 @@ export default {
 ```
 
 **Critical Voice Functions:**
-- `checkInventory` - Product availability with semantic search (inventory.js:202)
-- `getProductPrice` - Pricing with quantity discounts (inventory.js:245)
-- `bookAppointment` - Service scheduling with availability checking (appointments.js:257)
-- `checkOrderStatus` - Order tracking with customer verification (orders.js:178)
-- `getStoreInfo` - Hours, location, contact info in Greek/English (store-info.js:89)
-- `searchLiveProducts` - **100% live fetching** from armenius.com.cy website (live-product-search.js:12)
-- `trackOrderByNumber` - Advanced order tracking with real-time delivery updates (order-tracking.js:12)
+- `checkInventory` - Product availability with semantic search using uploaded CSV catalog (inventory.js)
+- `getProductPrice` - Pricing with quantity discounts (inventory.js)
+- `bookAppointment` - Service scheduling with availability checking (appointments.js)
+- `checkOrderStatus` - Order tracking with customer verification (orders.js)
+- `getStoreInfo` - Hours, location, contact info in Greek/English (store-info.js)
+- `searchLiveProducts` - **100% live fetching** from armenius.com.cy website (live-product-search.js)
+- `trackOrderByNumber` - Advanced order tracking with real-time delivery updates (order-tracking.js)
+- `buildCustomPC` - Interactive custom PC building service (custom-pc-builder.js)
+- `checkOrderArrivals` - Check for order arrivals ready for pickup (order-tracking.js)
 
 ### Dual-Runtime Architecture
 The system uses a sophisticated dual-runtime setup:
@@ -294,15 +308,19 @@ import('./lib/functions/index.js').then(async m => {
 ```
 
 ### Test Configuration
-- **Test Framework:** Vitest with ES modules support
+- **Test Framework:** Vitest with ES modules support and Node.js environment
+- **Setup Files:** `tests/setup.js` for test initialization and mocking
 - **Mocking Strategy:** vi.mock() for external dependencies (Supabase, function registry)
 - **Environment:** Isolated test environment with mock secrets
-- **Coverage:** Tracks webhook handlers, function execution, and database operations
+- **Coverage:** v8 provider with 70% threshold across branches, functions, lines, statements
+- **Exclusions:** Frontend directory excluded from backend test coverage
 
 Test files cover:
 - **Webhook processing:** Request validation, function execution, error handling
 - **Function registry:** Dynamic loading, caching integration, fallback responses
 - **Database operations:** Query performance and data integrity
+- **MCP Integration:** Test MCP server connections and voice pipeline
+- **Voice Integration:** End-to-end voice function testing
 
 ## Architecture Patterns
 
@@ -429,30 +447,48 @@ export default {
 
 **Function Registry Issues:**
 ```bash
-# Test function loading
-node -e "import('./lib/functions/index.js').then(m => console.log(Object.keys(m.FunctionRegistry.functions)))"
+# Test function loading and list all registered functions
+node -e "import('./lib/functions/index.js').then(async m => {
+  await m.FunctionRegistry.init();
+  console.log('Registered functions:', m.FunctionRegistry.list());
+})"
 
-# Check function execution
+# Check function execution with specific parameters
 npm run test:voice                    # Full voice integration test
+npm run test:mcp                      # Test MCP integration
 ```
 
 **Webhook Problems:**
 ```bash
-curl -X POST /api/vapi/health        # Check webhook health
-curl -X POST /api/vapi -d '{"type":"function-call","message":{"function_call":{"name":"getStoreInfo","arguments":"{}"}}}'
+curl -X GET /api/vapi/health         # Check webhook health and function registry stats
+curl -X POST /api/vapi -d '{"type":"function-call","functionCall":{"name":"getStoreInfo","parameters":{}}}'
+npm run health-check                 # Run comprehensive health check script
 ```
 
 **Database Connection:**
 ```bash
 npm run db:migrate                   # Apply any pending migrations
+npm run db:reset                     # Reset database to clean state
 supabase status                      # Check local Supabase status
 ```
 
 **Cache Issues:**
 ```bash
 # Test Redis connection
-node -e "import('./lib/cache/index.js').then(m => m.CacheManager.set('test', 'value').then(() => console.log('Redis OK')))"
+node -e "import('./lib/cache/index.js').then(async m => {
+  await m.CacheManager.init();
+  await m.CacheManager.set('test', 'value');
+  const result = await m.CacheManager.get('test');
+  console.log('Cache test result:', result);
+})"
 npm run cache:warm                   # Pre-warm cache manually
+```
+
+**Environment Validation:**
+```bash
+npm run validate-env                 # Check all required environment variables
+npm run validate-env:development     # Check development environment
+npm run build-check                  # Validate build configuration
 ```
 
 ## Latest Status: 100% Live Fetching Enabled
