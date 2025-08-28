@@ -7,16 +7,8 @@ import { Button } from '@/components/ui/button'
 import MariaAvatar from '@/components/call/MariaAvatar'
 import CallButton from '@/components/call/CallButton'
 import CallStatus from '@/components/call/CallStatus'
-import LanguageSelector from '@/components/call/LanguageSelector'
 import { 
-  Building2, 
-  MapPin, 
-  Clock, 
-  Phone, 
-  Wrench,
-  ShoppingCart,
-  Calendar,
-  User
+  Building2
 } from 'lucide-react'
 
 type CallState = 'idle' | 'connecting' | 'ringing' | 'connected' | 'ended' | 'error'
@@ -269,20 +261,6 @@ const CallInterface: React.FC = () => {
     // Volume control would be handled by browser/system
   }
 
-  const services = {
-    en: [
-      { icon: ShoppingCart, title: 'Product Search', desc: 'Find computers, components & electronics' },
-      { icon: Calendar, title: 'Appointments', desc: 'Book service & consultation appointments' },
-      { icon: User, title: 'Order Tracking', desc: 'Track your orders and delivery status' },
-      { icon: Wrench, title: 'Technical Support', desc: 'Get help with repairs & troubleshooting' }
-    ],
-    el: [
-      { icon: ShoppingCart, title: 'Αναζήτηση Προϊόντων', desc: 'Βρείτε υπολογιστές, εξαρτήματα & ηλεκτρονικά' },
-      { icon: Calendar, title: 'Ραντεβού', desc: 'Κλείστε ραντεβού για υπηρεσίες & συμβουλές' },
-      { icon: User, title: 'Παρακολούθηση Παραγγελιών', desc: 'Παρακολουθήστε τις παραγγελίες σας' },
-      { icon: Wrench, title: 'Τεχνική Υποστήριξη', desc: 'Λάβετε βοήθεια για επισκευές' }
-    ]
-  }
 
 
   return (
@@ -331,53 +309,8 @@ const CallInterface: React.FC = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Sidebar - Store Info */}
-          <div className="space-y-6">
-            {/* Language Selector */}
-            <Card className="overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">
-                  {language === 'el' ? 'Επιλογή Γλώσσας' : 'Choose Language'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <LanguageSelector
-                  selectedLanguage={language}
-                  onLanguageChange={setLanguage}
-                  variant="pills"
-                />
-              </CardContent>
-            </Card>
-
-            {/* Maria's Capabilities */}
-            <Card className="overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center space-x-2">
-                  <span>🤖</span>
-                  <span>
-                    {language === 'el' ? 'Υπηρεσίες της Μαρίας' : 'What Maria Can Help With'}
-                  </span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {services[language].map((service, index) => (
-                  <div key={index} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded-lg">
-                      <service.icon className="size-5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-800">{service.title}</h4>
-                      <p className="text-sm text-gray-600">{service.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-          </div>
-
-          {/* Center - Main Call Interface */}
+        <div className="max-w-4xl mx-auto">
+          {/* Main Call Interface */}
           <div className="space-y-8">
             {/* Hero Section */}
             <div className="text-center space-y-6">
@@ -432,74 +365,6 @@ const CallInterface: React.FC = () => {
                 className="max-w-md mx-auto"
               />
             )}
-          </div>
-
-          {/* Right Sidebar - Store Details */}
-          <div className="space-y-6">
-            {/* Store Hours */}
-            <Card className="overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center space-x-2">
-                  <Clock className="size-5" />
-                  <span>
-                    {language === 'el' ? 'Ωράριο Λειτουργίας' : 'Store Hours'}
-                  </span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {[
-                  { day: language === 'el' ? 'Δευτέρα - Παρασκευή' : 'Monday - Friday', hours: '9:00 AM - 7:00 PM' },
-                  { day: language === 'el' ? 'Σάββατο' : 'Saturday', hours: '9:00 AM - 2:00 PM' },
-                  { day: language === 'el' ? 'Κυριακή' : 'Sunday', hours: language === 'el' ? 'Κλειστά' : 'Closed' }
-                ].map((schedule, index) => (
-                  <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
-                    <span className="font-medium text-gray-700">{schedule.day}</span>
-                    <span className="text-gray-600">{schedule.hours}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Contact Info */}
-            <Card className="overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">
-                  {language === 'el' ? 'Επικοινωνία' : 'Contact Information'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded-lg">
-                    <Phone className="size-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-800">+357 77-111-104</p>
-                    <p className="text-sm text-gray-600">
-                      {language === 'el' ? 'Κλήσεις & SMS' : 'Calls & SMS'}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-3">
-                  <div className="bg-gradient-to-r from-green-500 to-teal-500 p-2 rounded-lg">
-                    <MapPin className="size-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-800">171 Makarios Avenue</p>
-                    <p className="text-sm text-gray-600">Nicosia, Cyprus</p>
-                  </div>
-                </div>
-
-                <Button 
-                  variant="outline" 
-                  className="w-full mt-4 border-2 hover:bg-blue-50 hover:border-blue-300"
-                >
-                  <MapPin className="size-4 mr-2" />
-                  {language === 'el' ? 'Χάρτης & Οδηγίες' : 'View Map & Directions'}
-                </Button>
-              </CardContent>
-            </Card>
-
           </div>
         </div>
       </div>
