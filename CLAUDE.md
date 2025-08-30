@@ -319,14 +319,15 @@ npm run validate-env
 
 **Enhanced Voice Configuration**:
 - **AI Assistant**: Kyriakos (male, professional computer hardware expert)
-- **Primary Voice**: Azure `el-GR-NestorNeural` (Greek) / `en-US-BrianNeural` (English)
-- **Fallback Voices**: Azure `el-GR-AthinaNeural` → `en-US-AriaNeural` → 11Labs `DMrXvkhaNPEmPbI3ABs8`
-- **Languages**: Greek & English with 95%+ detection accuracy
+- **Primary Voice**: Azure `el-GR-NestorNeural` (Greek male voice)
+- **Language Strategy**: Greek-first with professional English support
+- **Detection**: Multilingual transcriber with automatic language detection
+- **Response Pattern**: Prefers Greek but fluent in English when needed
 - **Assistant ID**: `89b5d633-974a-4b58-a6b5-cdbba8c2726a`
 
-**Enhanced Operational Status**: ✅ GREEK-ONLY PRODUCTION READY with Vapi MCP integration, browser testing capabilities, and direct assistant configuration management.
+**Enhanced Operational Status**: ✅ BILINGUAL PRODUCTION READY with Greek preference, professional English support, and complete voice assistant functionality.
 
-## Latest Updates - Greek-Only Configuration
+## Latest Updates - Bilingual Configuration (Greek-First)
 
 ### Direct Vapi API Integration ✅ WORKING
 - **Authentication**: Private API key `08c96be6-c4c0-4690-897e-f5e2d6f72edd` confirmed working
@@ -350,9 +351,11 @@ curl -X PUT -H "Authorization: Bearer 08c96be6-c4c0-4690-897e-f5e2d6f72edd" -H "
 - **Name**: "Kyriakos - Armenius Store AI Assistant"
 - **Voice**: Azure `el-GR-NestorNeural` (Greek male voice)
 - **Model**: GPT-4o-mini (cost-optimized)
-- **Language**: Greek-only responses
-- **First Message**: Full Greek greeting with service overview
-- **End Message**: Professional Greek farewell
+- **Language Strategy**: Greek-preferred with professional English support
+- **System Prompt**: Bilingual with cultural intelligence and Greek preference
+- **First Message**: Bilingual greeting offering both languages
+- **End Message**: Bilingual farewell
+- **Transcriber**: Multi-language with technical keyword optimization
 
 ### Browser Testing Implementation
 - **Test Page**: Created `test-greek-assistant.html` for direct voice testing
