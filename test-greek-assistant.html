@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Δοκιμή Κυριάκος - Armenius Voice Assistant</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
+        .subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .call-button {
+            display: block;
+            width: 200px;
+            height: 60px;
+            margin: 20px auto;
+            background: linear-gradient(45deg, #00d4aa, #00b894);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+        }
+        
+        .call-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 170, 0.4);
+        }
+        
+        .call-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info h3 {
+            color: #ffd700;
+            margin-top: 0;
+        }
+        
+        .test-scenarios {
+            margin-top: 30px;
+        }
+        
+        .scenario {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Δοκιμή Κυριάκος</h1>
+        <p class="subtitle">Armenius Store Voice Assistant - Μόνο Ελληνικά</p>
+        
+        <div class="info">
+            <h3>📋 Στοιχεία Δοκιμής</h3>
+            <p><strong>Assistant ID:</strong> 89b5d633-974a-4b58-a6b5-cdbba8c2726a</p>
+            <p><strong>Φωνή:</strong> Azure el-GR-NestorNeural (Ελληνικά)</p>
+            <p><strong>Γλώσσα:</strong> Μόνο Ελληνικά</p>
+            <p><strong>Τρόπος:</strong> Ο Κυριάκος μιλάει πρώτος</p>
+        </div>
+        
+        <button id="callButton" class="call-button">
+            🎙️ Ξεκίνα Κλήση
+        </button>
+        
+        <div id="status" class="status">
+            Έτοιμος για δοκιμή - Κάντε κλικ για να καλέσετε τον Κυριάκο
+        </div>
+        
+        <div class="test-scenarios">
+            <h3>🧪 Σενάρια Δοκιμής</h3>
+            
+            <div class="scenario">
+                <strong>1. Γενικές Πληροφορίες:</strong><br>
+                "Τι ώρες είστε ανοιχτοί;" ή "Πού βρίσκεστε;"
+            </div>
+            
+            <div class="scenario">
+                <strong>2. Αναζήτηση Προϊόντων:</strong><br>
+                "Θέλω μια κάρτα γραφικών για gaming" ή "Τι laptops έχετε;"
+            </div>
+            
+            <div class="scenario">
+                <strong>3. Ραντεβού Service:</strong><br>
+                "Θέλω ραντεβού για επισκευή" ή "Πότε μπορώ να έρθω;"
+            </div>
+            
+            <div class="scenario">
+                <strong>4. Δοκιμή Αγγλικών:</strong><br>
+                "Hello, do you speak English?" (Πρέπει να απαντήσει στα ελληνικά)
+            </div>
+        </div>
+    </div>
+
+    <!-- Vapi Web SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/index.js"></script>
+    <script>
+        class VapiClient {
+            constructor() {
+                this.vapi = null;
+                this.isCallActive = false;
+                this.init();
+            }
+
+            init() {
+                try {
+                    this.vapi = new window.Vapi('32b555af-1fbc-4b6c-81c0-c940b07c6da2'); // Public key
+                    this.setupEventListeners();
+                    this.updateStatus('Vapi SDK φορτώθηκε επιτυχώς');
+                } catch (error) {
+                    console.error('Σφάλμα φόρτωσης Vapi SDK:', error);
+                    this.updateStatus('❌ Σφάλμα φόρτωσης SDK', 'error');
+                }
+            }
+
+            setupEventListeners() {
+                const button = document.getElementById('callButton');
+                button.addEventListener('click', () => this.toggleCall());
+
+                if (this.vapi) {
+                    this.vapi.on('call-start', () => {
+                        console.log('Κλήση ξεκίνησε');
+                        this.isCallActive = true;
+                        this.updateButton('🔴 Τέλος Κλήσης');
+                        this.updateStatus('📞 Κλήση ενεργή - Μιλήστε τώρα!');
+                    });
+
+                    this.vapi.on('call-end', () => {
+                        console.log('Κλήση τερματίστηκε');
+                        this.isCallActive = false;
+                        this.updateButton('🎙️ Ξεκίνα Κλήση');
+                        this.updateStatus('Κλήση ολοκληρώθηκε');
+                    });
+
+                    this.vapi.on('speech-start', () => {
+                        console.log('Ο χρήστης άρχισε να μιλάει');
+                        this.updateStatus('🎤 Σας ακούω...');
+                    });
+
+                    this.vapi.on('speech-end', () => {
+                        console.log('Ο χρήστης σταμάτησε να μιλάει');
+                        this.updateStatus('🤖 Ο Κυριάκος σκέφτεται...');
+                    });
+
+                    this.vapi.on('message', (message) => {
+                        console.log('Μήνυμα από assistant:', message);
+                        if (message.type === 'function-call') {
+                            this.updateStatus(`🔧 Εκτέλεση: ${message.functionCall?.name || 'άγνωστη λειτουργία'}`);
+                        }
+                    });
+
+                    this.vapi.on('error', (error) => {
+                        console.error('Vapi Error:', error);
+                        this.updateStatus('❌ Σφάλμα κλήσης', 'error');
+                        this.isCallActive = false;
+                        this.updateButton('🎙️ Ξεκίνα Κλήση');
+                    });
+                }
+            }
+
+            async toggleCall() {
+                if (!this.vapi) {
+                    this.updateStatus('❌ Vapi SDK δεν έχει φορτωθεί', 'error');
+                    return;
+                }
+
+                try {
+                    if (this.isCallActive) {
+                        await this.vapi.stop();
+                    } else {
+                        this.updateStatus('🔄 Σύνδεση με τον Κυριάκο...');
+                        this.updateButton('🔄 Συνδέεται...');
+                        
+                        await this.vapi.start('89b5d633-974a-4b58-a6b5-cdbba8c2726a');
+                    }
+                } catch (error) {
+                    console.error('Σφάλμα κλήσης:', error);
+                    this.updateStatus('❌ Αποτυχία σύνδεσης: ' + error.message, 'error');
+                    this.updateButton('🎙️ Ξεκίνα Κλήση');
+                }
+            }
+
+            updateStatus(message, type = 'info') {
+                const statusDiv = document.getElementById('status');
+                statusDiv.textContent = message;
+                statusDiv.style.background = type === 'error' ? 
+                    'rgba(255, 0, 0, 0.2)' : 
+                    'rgba(255, 255, 255, 0.1)';
+            }
+
+            updateButton(text) {
+                const button = document.getElementById('callButton');
+                button.textContent = text;
+                button.disabled = text.includes('Συνδέεται');
+            }
+        }
+
+        // Αρχικοποίηση όταν φορτώνει η σελίδα
+        document.addEventListener('DOMContentLoaded', () => {
+            new VapiClient();
+        });
+    </script>
+</body>
+</html>
